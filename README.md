@@ -10,8 +10,8 @@ Shuttle-utils is a collection of Bash scripts for monitoring your Linux computer
     cd to shuttle-utils/
     chmod +x * (lazily chmod all files in dir, you should chmod -x README.md afterwards)
 	 
-In these scripts, SHuttle is executed with no specified path, this means you will either have to create a symbolic link to SHuttle in /usr/bin
-or put SHuttle's path to your $PATH environment variable. This is typically done by adding 'PATH="path/to/dir:$PATH' to your user's .bashrc or .profile files.
+In these scripts, SHuttle is executed with no specified path, this means you will either have to create a symbolic link to SHuttle in `/usr/bin`
+or put SHuttle's path to your `$PATH` environment variable. This is typically done by adding `PATH="path/to/dir:$PATH"` to your user's `.bashrc` or `.profile` files.
 You will have to repeat whichever method you choose on any remote devices you specify in the hosts_check script. 
 
 ``` 
