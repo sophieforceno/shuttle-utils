@@ -31,7 +31,7 @@ spaced				Low disk space notification daemon
 
 
 # Notes:
-With the exception of bspnd and hosts_check, all scripts are meant to be executed via cron
+With the exception of `bspnd` and `hosts_check`, all scripts are meant to be executed via cron
 
 See the individual scripts for more information on each
 
