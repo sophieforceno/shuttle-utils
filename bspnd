@@ -1,0 +1,53 @@
+#! /bin/bash
+
+# bspnd - Battery Status Push Notifier daemon - v1.0
+# 	By Andy Forceno <andy@aurorabox.tech>
+# 
+
+# Usage:
+# 	./bspnd > /dev/null 2>&1 &
+# Will run bspnd in the background while suppressing output
+#
+
+# Device to send pushes to (can be "all")
+device="phone"
+
+# I keep this at an amount that I consider safe. 
+# Large intervals could cause you to get one (or no) notification
+# Personally, I sometimes ignore the 1st notification, so a 2nd is nice :-)
+interval="5m"
+
+# Battery percentage when we should send a low battery notification
+warn_level="25"
+
+full_flag=0
+
+# Initial percentage used to determine if battery is charging or discharging
+prev_percent=$(acpi | awk '{ gsub(/[^ 0-9]/, ""); print $2 }')
+
+hostname=$(hostname)
+echo -e "\nChecking battery status in $interval intervals...\n"
+
+while true; do
+	percent=$(acpi | awk '{ gsub(/[^ 0-9]/, ""); print $2 }') 	
+# Warn user to plug into power source if remaining capacity is below user-defined threshold
+# and if the battery level is decreasing
+	if [ "$percent" -le "$warn_level" ] && [ "$prev_percent" -gt "$percent" ]; then
+		shuttle -p -n "$device" "$hostname: Plug in now" "Battery is at $percent percent"
+	fi		
+# If battery is fully charged and we haven't notified user yet
+	if [ "$percent" -eq "100" ] && [ "$full_flag" -eq "0" ]; then
+		shuttle -p -n "$device" "$hostname: Battery charged" "Battery is at $percent percent"
+		full_flag=1
+	fi
+# If percentage < 100, the battery isn't full so,
+# set a flag so future iterations know it's not full
+	if [ "$percent" -lt "100" ]; then
+		full_flag=0
+	fi
+	
+	sleep "$interval"
+# Save percentage from last iteration
+# so we can determine if charge is increasing or decreasing
+	prev_percent=$percent
+done

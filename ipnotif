@@ -1,0 +1,29 @@
+#! /bin/bash
+
+# ipnotif: IP Address Change Push Notifier v1.2
+# by Andy Forceno <andy@aurorabox.tech>
+#
+
+# Uses the IPify API to obtain external IP
+# And compares it to the previously obtained address
+# Requires curl
+
+# This script is brought to you by the music of Natasha Kmeto: https://soundcloud.com/natashakmeto
+
+# The device to push notifications to
+device="all"
+
+# Last known IP
+last_ip=$(tac "$HOME"/.iphist | grep -m 1 '.' | awk '{print $4}')
+
+# API call to obtain IP address
+# See: https://www.ipify.org/
+new_ip=$(curl -s 'https://api.ipify.org?format=text')
+
+if [[ "$last_ip" != "$new_ip" ]]; then
+	shuttle -p -n "$device" "$(hostname): External IP address change" "Current IP: $new_ip"
+# Write date & address to file for IP address history
+	echo "$(date "+%D %H:%M") - $new_ip" >> "$HOME"/.iphist
+fi
+
+

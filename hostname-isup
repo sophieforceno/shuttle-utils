@@ -1,0 +1,30 @@
+#! /bin/bash
+
+# hostname-isup - Check if a host is up - v1.0 
+# 	by Andy Forceno <andy@aurorabox.tech>
+#
+
+# This script could easily be expanded to include multiple hosts
+# You can borrow code from the hosts_check and spaced or smartmon scripts  :-)
+
+# Host IP address and name
+host_addr="192.168.1.2"
+hostname="$(hostname)"
+
+# Device to send push to
+device="phone"
+
+# How often to ping host
+sleep_time="5m"
+
+while true; do
+	ping -w 10 -c 3 "$host_addr" > /dev/null
+	rc=$?
+
+	# If exit code != 0, ping failed so host is (probably) down!
+	if [[ $rc -ne 0 ]]; then                  
+		shuttle -p -n $device "$hostname is down or not responding to pings (rc = $rc)" > /dev/null
+	fi
+	
+	sleep $sleep_time
+done

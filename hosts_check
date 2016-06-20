@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# hosts_check - Helper script that checks host connectivity
+# 	By Andy Forceno <andy@aurorabox.tech>
+# 
+
+# Note: Source via Bash before executing other tasks on remote hosts
+
+# Hosts to check
+HOSTS=("192.168.1.2" "192.168.1.10" "192.168.1.13")
+
+# Check if machines are available b
+for i in "${HOSTS[@]}"; do
+	ping -c 1 -i 0.4 "$i" > /dev/null
+  	rc=$?
+    
+    if [[ $rc != 0 ]]; then
+    	echo -e "hosts_check: Host "$i" is unreachable"
+		# Only match exact patterns
+		HOSTS=($(echo "${HOSTS[@]}" | sed -e "s/\<$i\>//g"))
+    fi
+done
+

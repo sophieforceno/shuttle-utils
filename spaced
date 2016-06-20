@@ -1,0 +1,44 @@
+#! /bin/bash
+
+# spaced - Disk Space Notification Daemon - v1.0
+# 	By Andy Forceno <andy@aurorabox.tech>
+#
+
+# Check if hosts are available before checking disc space
+source hosts_check
+
+# Device to send push notifications to
+device="phone"
+
+# Percentage threshold at which to warn user of low disk space
+percent="98"
+
+# Everything after the ssh command will be executed on each remote host
+# Mail will be sent to root at each remote host
+for i in "${HOSTS[@]}"; do
+# Pass $i, $percent, and $device to remote host
+	ssh "$i" LC_i="$i" LC_percent="$percent" LC_device="$device" bash <<\EOF 
+# List of all block devices
+	df_output=$(df -lh | grep "/dev/sd.*")
+# Devices
+	dev_files=($(echo -e "$df_output" | awk '{ print $1 }'))
+# Mountpoints
+	mounts=($(echo -e "$df_output" | awk '{ print $6 }'))
+# Percent free space
+	free_space=($(echo -e "$df_output" | awk '{ print $5 }' | tr -d '%'))
+
+# For each line in $free_space, if $j < some %, warn!!
+	for j in "${free_space[@]}"; do
+		if [[ "$j" > "$LC_percent" ]]; then
+			line_num=$(echo -e "$df_output" | grep -n "$j" | cut -f1 -d:)
+		# df line with drive info
+			df_line=$(echo -e "$df_output" | grep -n "$j" | cut -d: -f2-)
+			echo "spaced: $LC_i: $(echo -e "$mounts" | sed -n $line_num'p') partition has less than 2% free space!"
+			echo -e "$(df -lh | head -n1)\n$df_line" | mail -s "space.d: Low disk space for $(echo -e "$dev_files" | sed -n $line_num'p')" "root@$LC_i" 
+			chmod +x ~/scripts/shuttle
+			shuttle -p -n "$device" "$LC_i: Low disk space for $(echo -e "$dev_files" | sed -n $line_num'p')" "$(echo -e "$mounts" | sed -n $line_num'p') partition has $((100-$(echo -e "$free_space" | sed -n $line_num'p')))% free space"
+		fi
+	done
+EOF
+done
+exit 0

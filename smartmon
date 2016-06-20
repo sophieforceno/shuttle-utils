@@ -1,0 +1,37 @@
+#! /bin/bash
+
+#
+# Smartmon - S.M.A.R.T. Diagnostic Info Push Notifier - v1.0
+# 	by Andy Forceno <andy@aurorabox.tech>
+#
+# Checks SMART info for disks on remote hosts and pushes info to a device
+
+# It is recommeneded to run this daily via cron (as root user)
+# And run the long test weekly (see smartmon_long)
+# You will need passwordless-sudo on the remote devices to automate this script
+
+# Device to send push notifications to
+device="phone"
+
+# Drive to scan
+# Currently only supports a single drive
+drive="/dev/sda"
+
+# User to send reports to on remote hosts
+mailto="root@$(hostname)"
+
+# Check if hosts are available before running remote SMART tests
+source hosts_check
+
+# Iterate through hosts list
+for j in "${HOSTS[@]}"; do
+echo -e "Smartmon: SMART Test for host: $j"
+	smart_test=$(ssh "$j" "sudo smartctl -a $drive")
+	smart_result=$(echo "$smart_test" | head -n30 | grep "overall-health" | awk -F': ' '{ print $2 }')
+echo -e "Smartmon: $smart_result"
+# Only notify if test fails so we don't swamp the poor sys admin
+	if [[ -n "$smart_result" && "$smart_result" != "PASSED" ]]; then
+		echo "$smart_test" | mail -s "$j: SMART Diagnostics for $drive" "$mailto"
+		shuttle -p -n "$device" "$host: SMART Diagnostic info" "$drive $smart_result at $(echo "$(date +%R) on $(date +%m-%d-%y)")"
+	fi
+done
