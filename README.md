@@ -8,7 +8,9 @@ Shuttle-utils is a collection of Bash scripts for monitoring your Linux computer
 # Installation:
     git clone https://github.com/andyforceno/shuttle-utils/
     cd to shuttle-utils/
-    chmod +x * (lazily chmod all files in dir, you should chmod -x README.md afterwards)
+    # Find all files in dir without file extension and set executable bit
+    find . -type f ! -name "*.*" -maxdepth 1 -exec chmod +x {} \;
+
 	 
 In these scripts, SHuttle is executed with no specified path, this means you will either have to create a symbolic link to SHuttle in `/usr/bin`
 or put SHuttle's path to your `$PATH` environment variable. This is typically done by adding `PATH="path/to/dir:$PATH"` to your user's `.bashrc` or `.profile` files.
