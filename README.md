@@ -1,6 +1,6 @@
 README.md
 
-**SHuttle-utils v0.9-(062016) - First public release!**
+**SHuttle-utils v0.9.5-(070416) - Updated!**
 
 Shuttle-utils is a collection of Bash scripts for monitoring your Linux computer(s). They require SHuttle, availble here: https://github.com/andyforceno/shuttle
 
@@ -19,11 +19,12 @@ You will have to repeat whichever method you choose on any remote devices you sp
 ``` 
 shuttle-utils contains the following scripts:
 
+back2ntfs			New! Create /.tar archives, transfer to NAS device, and verify checksums
 bspnd				Battery charge status push notifier daemon
 checklogs			Notify if system logs are greater than some size
 hostname-isup		Notify if host stops responding to pings
 hosts_check			Helper script to check if hosts are up (must be in same directory as the scripts that call it)
-					Used by: checklogs, smartmon, smartmon_long, spaced
+					Used by: back2ntfs, checklogs, smartmon, smartmon_long, spaced
 ipnotif				Notify when dynamic IP changes (requires curl)
 reboot_notif		Notify when a reboot is requred
 smartmon			Push SMART diagnostic info about drives on remote hosts

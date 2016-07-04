@@ -15,14 +15,13 @@ echo "Checking host: $i"
 # Pass $i to remote host
 # Then, execute log size checking on remote host
 # Remote host must have SHuttle set up otherwise pushes won't be sent
-# Mail notifications are disabled by default
-	ssh "$i" LC_i="$i" bash <<\EOF 
+	ssh "$i" LC_i="$i" bash << 'EOF' 
 MAILTO="root@$i"
 logsizes=$(ls -alh /var/log | awk '{ print $5 "   " $9 }' | grep 'G')
 
 if [[ -n "$logsizes" ]]; then
 	echo "checklogs: Large log file(s) detected!" 
-#	echo -e "$logsizes" | mail -s "checklogs: Large log files detected!" "$MAILTO"
+	echo -e "$logsizes" | mail -s "checklogs: Large log files detected!" "$MAILTO"
 	~/scripts/shuttle -p -n All "$LC_i: Large log files detected!" "$logsizes"
 fi
 EOF

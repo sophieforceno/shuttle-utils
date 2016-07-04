@@ -13,9 +13,9 @@
 device="phone"
 
 # I keep this at an amount that I consider safe. 
-# Large intervals could cause you to get one (or no) notification
+# Large intervals could cause you to get one (or no) notification before your battery dies
 # Personally, I sometimes ignore the 1st notification, so a 2nd is nice :-)
-interval="5m"
+interval="7m"
 
 # Battery percentage when we should send a low battery notification
 warn_level="25"

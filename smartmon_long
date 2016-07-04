@@ -12,7 +12,7 @@
 device="phone"
 
 # Drive to scan on remote host
-# TODO: Create an array so we can do multiples drives on each host
+# TODO: Create an array so we can do multiple drives on each host
 drive="/dev/sda"
 
 # User to send mail to on remote host
