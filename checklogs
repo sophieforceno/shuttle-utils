@@ -1,27 +1,26 @@
 #! /bin/bash
 
 #
-# Checklogs - Check for very large log files - v1.0
+# Checklogs - Check for very large log files - v1.0.5
 # 	by Andy Forceno <andy@aurorabox.tech>
 # 
 # Check for very large log files and alert the system administrator
 
 # Check if hosts are available
-source hosts_check
+source ~/scripts/bin/hosts_check
 
 for i in "${HOSTS[@]}"; do
-echo "Checking host: $i"
-
+echo "checklogs: Checking log files on host: $i"
 # Pass $i to remote host
 # Then, execute log size checking on remote host
 # Remote host must have SHuttle set up otherwise pushes won't be sent
 	ssh "$i" LC_i="$i" bash << 'EOF' 
-MAILTO="root@$i"
+mailto="root@$LC_i"
 logsizes=$(ls -alh /var/log | awk '{ print $5 "   " $9 }' | grep 'G')
 
 if [[ -n "$logsizes" ]]; then
 	echo "checklogs: Large log file(s) detected!" 
-	echo -e "$logsizes" | mail -s "checklogs: Large log files detected!" "$MAILTO"
+	echo -e "$logsizes" | mail -s "checklogs: Large log files detected!" "$mailto"
 	~/scripts/shuttle -p -n All "$LC_i: Large log files detected!" "$logsizes"
 fi
 EOF
