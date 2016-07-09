@@ -19,7 +19,7 @@ You will have to repeat whichever method you choose on any remote devices you sp
 ``` 
 shuttle-utils contains the following scripts:
 
-back2ntfs			New! Create /.tar archives, transfer to NAS device, and verify checksums
+back2ntfs			New! Create .tar archives, transfer to NAS device, and verify checksums
 bspnd				Battery charge status push notifier daemon
 checklogs			Notify if system logs are greater than some size
 hostname-isup		Notify if host stops responding to pings
