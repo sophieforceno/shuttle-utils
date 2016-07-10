@@ -13,7 +13,7 @@ Shuttle-utils is a collection of Bash scripts for monitoring your Linux computer
     
 
 Before executing any of the shuttle-utils scripts,
-open them in a text editor and change the $device and $mailto variables
+open them in a text editor and change the `$device` and `$mailto` variables
 
 In these scripts, SHuttle is executed from /usr/bin.
 It is recommended that you create a symbolic link in /usr/bin that points to SHuttle:
