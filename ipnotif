@@ -21,7 +21,7 @@ last_ip=$(tac "$HOME"/.iphist | grep -m 1 '.' | awk '{print $4}')
 new_ip=$(curl -s 'https://api.ipify.org?format=text')
 
 if [[ "$last_ip" != "$new_ip" ]]; then
-	shuttle -p -n "$device" "$(hostname): External IP address change" "Current IP: $new_ip"
+	/usr/bin/shuttle -p -n "$device" "$(hostname): External IP address change" "Current IP: $new_ip"
 # Write date & address to file for IP address history
 	echo "$(date "+%D %H:%M") - $new_ip" >> "$HOME"/.iphist
 fi

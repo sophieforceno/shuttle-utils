@@ -1,6 +1,6 @@
 README.md
 
-**SHuttle-utils v0.9.5-(070416) - Updated!**
+**SHuttle-utils v0.9.6-(070916) - Updated!**
 
 Shuttle-utils is a collection of Bash scripts for monitoring your Linux computer(s). They require SHuttle, availble here: https://github.com/andyforceno/shuttle
 
@@ -10,11 +10,16 @@ Shuttle-utils is a collection of Bash scripts for monitoring your Linux computer
     cd to shuttle-utils/
     # Find all files in dir without file extension and set executable bit
     find . -type f ! -name "*.*" -maxdepth 1 -exec chmod +x {} \;
+    
 
-	 
-In these scripts, SHuttle is executed with no specified path, this means you will either have to create a symbolic link to SHuttle in `/usr/bin`
-or put SHuttle's path to your `$PATH` environment variable. This is typically done by adding `PATH="path/to/dir:$PATH"` to your user's `.bashrc` or `.profile` files.
-You will have to repeat whichever method you choose on any remote devices you specify in the hosts_check script. 
+Before executing any of the shuttle-utils scripts,
+open them in a text editor and change the $device and $mailto variables
+
+In these scripts, SHuttle is executed from /usr/bin.
+It is recommended that you create a symbolic link in /usr/bin that points to SHuttle:
+`ln -s path/to/shuttle /usr/bin`
+You must create the same symbolic link on all hosts specified in the hosts_check scripts.
+
 
 ``` 
 shuttle-utils contains the following scripts:
@@ -28,7 +33,7 @@ hosts_check			Helper script to check if hosts are up (must be in same directory 
 ipnotif				Notify when dynamic IP changes (requires curl)
 reboot_notif		Notify when a reboot is requred
 smartmon			Push SMART diagnostic info about drives on remote hosts
-smartmon_long		Run Smartctl long test on remote hosts and send pushes of results
+smartmon_long		Run Smartctl long test on remote hosts and send pushes of results (temporarily removed due to bugs)
 spaced				Low disk space notification daemon
 ```
 

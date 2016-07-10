@@ -33,11 +33,11 @@ while true; do
 # Warn user to plug into power source if remaining capacity is below user-defined threshold
 # and if the battery level is decreasing
 	if [ "$percent" -le "$warn_level" ] && [ "$prev_percent" -gt "$percent" ]; then
-		shuttle -p -n "$device" "$hostname: Plug in now" "Battery is at $percent percent"
+		/usr/bin/shuttle -p -n "$device" "$hostname: Plug in now" "Battery is at $percent percent"
 	fi		
 # If battery is fully charged and we haven't notified user yet
 	if [ "$percent" -eq "100" ] && [ "$full_flag" -eq "0" ]; then
-		shuttle -p -n "$device" "$hostname: Battery charged" "Battery is at $percent percent"
+		/usr/bin/shuttle -p -n "$device" "$hostname: Battery charged" "Battery is at $percent percent"
 		full_flag=1
 	fi
 # If percentage < 100, the battery isn't full so,

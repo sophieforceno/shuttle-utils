@@ -21,7 +21,10 @@ drive="/dev/sda"
 mailto="root@$(hostname)"
 
 # Check if hosts are available before running remote SMART tests
-source hosts_check
+source ~/scripts/bin/hosts_check
+
+# Remove Chip from hosts array, it has no hard disks
+HOSTS=($(echo "${HOSTS[@]}" | sed -e "s/Chip//g"))
 
 # Iterate through hosts list
 for j in "${HOSTS[@]}"; do
@@ -32,6 +35,6 @@ echo -e "Smartmon: $smart_result"
 # Only notify if test fails so we don't swamp the poor sys admin
 	if [[ -n "$smart_result" && "$smart_result" != "PASSED" ]]; then
 		echo "$smart_test" | mail -s "$j: SMART Diagnostics for $drive" "$mailto"
-		shuttle -p -n "$device" "$host: SMART Diagnostic info" "$drive $smart_result at $(echo "$(date +%R) on $(date +%m-%d-%y)")"
+		/usr/bin/shuttle -p -n "$device" "$host: SMART Diagnostic info" "$drive $smart_result at $(echo "$(date +%R) on $(date +%m-%d-%y)")"
 	fi
 done

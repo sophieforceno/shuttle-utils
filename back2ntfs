@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #
-# Back2NTFS - v0.9
-#   by Andy Forceno <andy@aurorabox.tech>
+# Back2NTFS - v0.9.5
+# by Andy Forceno <andy@aurorabox.tech>
 #
 # Tar /home/user and /etc on many remote hosts
 # Copy to an NTFS NAS device & create and verify SHA1 checksums
@@ -12,8 +12,12 @@
 # Hosts to be backed up via SSH (passwordless login required for automation)
 source ~/scripts/bin/hosts_check
 
+# Remove Chip from hosts array, it has no hard disks
+HOSTS=($(echo "${HOSTS[@]}" | sed -e "s/Chip//g"))
+
 # Location to log to on each host specified in hosts_check
-log="~/backup-$(date +%m%d%y).log"
+log_path="~/.config/shuttle-utils"
+log="~/back2ntfs-$(date +%m%d%y).log"
 # Path to backup dir
 backup_path="/media/andy/external/Backups"
 
@@ -22,24 +26,29 @@ echo -e "Back2NTFS: See "$log" on each host for individual backup logs"
 
 for i in "${HOSTS[@]}"; do
   echo "Connecting to: $i"
-  # Pass $vars to remote host
-  ssh "$i" LC_i="$i" LC_log="$log" LC_backup_path="$backup_path" bash << 'EOF' 
-  if [[ ! -f "$LC_log" ]]; then
-    touch "$LC_log"
+  # Pass locally-declared vars to remote host
+  ssh "$i" LC_i="$i" LC_log_path="$log_path" LC_backup_path="$backup_path" bash -x << 'EOF' 
+
+  # If $log_path doesn't exist, create it
+  if [ ! -d "$LC_log_path" ]; then
+    mkdir "$LC_log_path"
   fi
+# Create the log file
+  touch "$LC_log_path"/back2ntfs-$(date +%m%d%y).log
 
   # Backup /home/andy
-  echo -e "Back2NTFS: $LC_i: Creating tar file of /home/andy in "$LC_backup_path"/"$LC_i"...\n" >> "$LC_log"
-  sudo touch "$LC_backup_path"/"$LC_i"/home-$(date +%m%d%y).tar >> "$LC_log"
+  echo -e "Back2NTFS: $LC_i: Creating tar file of /home/andy in "$LC_backup_path"/"$LC_i"...\n" >> "$LC_log_path"/back2ntfs-$(date +%m%d%y).log
+  sudo touch "$LC_backup_path"/"$LC_i"/home-$(date +%m%d%y).tar >> "$LC_log_path"/back2ntfs-$(date +%m%d%y).log
   # Exclude caches, and most folders that begin with a dot
-  tar -X /home/andy/scripts/.excludes --exclude-caches-all -cvPf "$LC_backup_path"/"$LC_i"/home-$(date +%m%d%y).tar /home/andy >> "$LC_log" && wait
-  sha1sum "$LC_backup_path"/"$LC_i"/home-$(date +%m%d%y).tar > "$LC_backup_path"/"$LC_i"/home-$(date +%m%d%y).tar.sha1 >> "$LC_log" && wait
+  tar -X /home/andy/scripts/.excludes --exclude-caches-all -cvPf "$LC_backup_path"/"$LC_i"/home-$(date +%m%d%y).tar /home/andy >> "$LC_log_path"/back2ntfs-$(date +%m%d%y).log && wait
+  sha1sum "$LC_backup_path"/"$LC_i"/home-$(date +%m%d%y).tar > "$LC_backup_path"/"$LC_i"/home-$(date +%m%d%y).tar.sha1 >> "$LC_log_path"/back2ntfs-$(date +%m%d%y).log 
 
   # Backup /etc
-  echo -e "Back2NTFS: $LC_i: Creating tar file of /etc in "$LC_backup_path"/"$LC_i"...\n" >> "$LC_log"
-  sudo touch "$LC_backup_path"/"$LC_i"/etc-$(date +%m%d%y).tar >> "$LC_log"
-  sudo tar --exclude-caches-all -cvPf "$LC_backup_path"/"$LC_i"/etc-$(date +%m%d%y).tar /etc >> "$LC_log" && wait
-  sha1sum "$LC_backup_path"/"$LC_i"/etc-$(date +%m%d%y).tar > "$LC_backup_path"/"$LC_i"/etc-$(date +%m%d%y).tar.sha1 >> "$LC_log" && wait
+  echo -e "Back2NTFS: $LC_i: Creating tar file of /etc in "$LC_backup_path"/"$LC_i"...\n" >> "$LC_log_path"/back2ntfs-$(date +%m%d%y).log
+# TODO: Log file not  being created on Poincare . Sudo no good?
+  sudo touch "$LC_backup_path"/"$LC_i"/etc-$(date +%m%d%y).tar >> "$LC_log_path"/back2ntfs-$(date +%m%d%y).log
+  sudo tar --exclude-caches-all -cvPf "$LC_backup_path"/"$LC_i"/etc-$(date +%m%d%y).tar /etc >> "$LC_log_path"/back2ntfs-$(date +%m%d%y).log && wait
+  sha1sum "$LC_backup_path"/"$LC_i"/etc-$(date +%m%d%y).tar > "$LC_backup_path"/"$LC_i"/etc-$(date +%m%d%y).tar.sha1 >> "$LC_log_path"/back2ntfs-$(date +%m%d%y).log
 EOF
 
   # Location of backups on host executing back2ntfs 
@@ -49,15 +58,15 @@ EOF
   echo "Back2NTFS: Deleting old backups..."
   find . -type f \( -iname \*.tar -o -iname \*.sha1 \) -mtime +28 -exec rm -i -f {} \+ 
 
-  ## Verify .sha1 checksums before exiting
-  for j in $(find . -name '*.sha1'); do
-    checksum=$(sha1sum -c "$j" | head -n 1 | awk -F": " '{ print $2 }')
-    echo "Back2NTFS: Verifying checksum of tar backup $(echo "$j" | sed 's/.sha1//g')..."
-    if [[ "$checksum" = "FAILED" ]]; then
-      echo "Back2NTFS: $(echo "$j" | sed 's/.sha1//g'): Bad checksum!" 
-      /home/andy/scripts/shuttle -p -n all "$i: Bad checksum!" "$j failed checksum verification at $(echo "$(date +%R) on $(date +%m-%d-%y)")"
-    else
-      echo "Back2NTFS: $(echo "$j" | sed 's/.sha1//g'): OK!"
+  ## Create and verify SHA1 checksums for new backups 
+  for j in $(find . -name '*.tar'); do
+    echo "Back2NTFS: Creating SHA1 checksum of "$backup_path"/"$i"/$(echo "$j" | sed -e 's#\.\/##g')..."
+    sha1sum "$j" > "$j.sha1" && wait
+    echo "Back2NTFS: Verifying SHA1 checksum of "$backup_path"/"$i"/$(echo "$j" | sed -e 's#\.\/##g')..."
+    sha1sum -c "$j.sha1" && wait $!
+    
+    if [[ "$?" = "1" ]]; then
+      /usr/bin/shuttle -p -n all "$i: Bad checksum!" "$j failed checksum verification at $(echo "$(date +%R) on $(date +%m-%d-%y)")"
     fi
   done
 done

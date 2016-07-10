@@ -6,7 +6,7 @@
 
 # Check if hosts are available before checking disc space
 source ~/scripts/bin/hosts_check
-
+HOSTS=($(echo "${HOSTS[@]}" | sed -e "s/Chip//g"))
 # Percentage threshold at which to warn user of low disk space
 percent="98"
 # Everything after the ssh command will be executed on each remote host
@@ -30,10 +30,10 @@ for i in "${HOSTS[@]}"; do
 			line_num=$(echo -e "$df_output" | grep -n "$j" | cut -f1 -d:)
 		# df line with drive info
 			df_line=$(echo -e "$df_output" | grep -n "$j" | cut -d: -f2-)
-			sudo echo "Spaced: $LC_i: $(echo -e "$mounts" | sed -n $line_num'p') partition has less than 2% free space!" >> /var/log/cron.log	# Logging to cron.log is optional
+			sudo echo "Spaced: $LC_i: $(echo -e "$mounts" | sed -n $line_num'p') partition has less than 2% free space!" >> /var/log/cron.log
 			echo -e "$(df -lh | head -n1)\n$df_line" | mail -s "space.d: Low disk space for $(echo -e "$dev_files" | sed -n $line_num'p')" "root@$LC_i" 
 			chmod +x ~/scripts/shuttle
-			~/scripts/shuttle -p -n All "$LC_i: Low disk space for $(echo -e "$dev_files" | sed -n $line_num'p')" "$(echo -e "$mounts" | sed -n $line_num'p') partition has $((100-$(echo -e "$free_space" | sed -n $line_num'p')))% free space"
+			/usr/bin/shuttle -p -n all "$LC_i: Low disk space for $(echo -e "$dev_files" | sed -n $line_num'p')" "$(echo -e "$mounts" | sed -n $line_num'p') partition has $((100-$(echo -e "$free_space" | sed -n $line_num'p')))% free space"
 		fi
 	done
 EOF
