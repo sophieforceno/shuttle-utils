@@ -1,6 +1,6 @@
 README.md
 
-**SHuttle-utils v0.9.6-(070916) - Updated!**
+**SHuttle-utils v0.9.7-(072416)**
 
 Shuttle-utils is a collection of Bash scripts for monitoring your Linux computer(s). They require SHuttle, availble here: https://github.com/andyforceno/shuttle
 
@@ -9,11 +9,15 @@ Shuttle-utils is a collection of Bash scripts for monitoring your Linux computer
     git clone https://github.com/andyforceno/shuttle-utils/
     cd to shuttle-utils/
     # Find all files in dir without file extension and set executable bit
-    find . -type f ! -name "*.*" -maxdepth 1 -exec chmod +x {} \;
+    find . -type f ! -name ".*" -maxdepth 1 -exec chmod +x {} \;
+    # Populate .hosts with your hosts, and then:
+    mv .hosts $HOME/.config/shuttle-utils
     
 
 Before executing any of the shuttle-utils scripts,
-open them in a text editor and change the `$device` and `$mailto` variables
+open them in a text editor and change the `$device`, `$mailto`, and `$BASEDIR` variables
+Check all scripts, there are user-specified variables at the beginning of most scripts
+In the next release (v0.9.8), all user-defined variables will be moved to a shuttle-utils config file 
 
 In these scripts, SHuttle is executed from `/usr/bin`
 It is recommended that you create a symbolic link in `/usr/bin` that points to SHuttle:
@@ -33,8 +37,9 @@ hosts_check			Helper script to check if hosts are up (must be in same directory 
 ipnotif				Notify when dynamic IP changes (requires curl)
 reboot_notif		Notify when a reboot is requred
 smartmon			Push SMART diagnostic info about drives on remote hosts
-smartmon_long		Run Smartctl long test on remote hosts and send pushes of results (temporarily removed due to bugs)
+smartmon_long		Run Smartctl long test on remote hosts and send pushes of results
 spaced				Low disk space notification daemon
+update_all			Run system updates via apt-get using dsh (Distributed Shell), and push updated packages list
 ```
 
 
@@ -50,6 +55,16 @@ Other things I've used SHuttle for:
 * Notify me when a torrent downloaded on my laptop is copied to my torrent server
 * Notify me when GPU/CPU temperature or system load cross a certain threshold 
 * Send me reminders to do X, where X is a mundane, oft-repeated task I somehow forget to do
+
+
+# Changelong:
+v0.9.7-(072416):
+* Re-wrote sysmon script
+* Fixed bugs in smartmon_long, re-added to repo 
+* Added update_all (requires dsh, Distributed Shell)
+* Most scripts now have sending of mail disabled by default
+* hosts_check now reads hostnames from a newline-delimited list ~/.config/shuttle-utils/.hosts
+* Fixed mumerous bugs and code inconsistencies across scripts
 
 
 # License:
