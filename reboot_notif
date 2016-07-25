@@ -9,11 +9,10 @@
 device="phone"
 
 # Last reboot date/time
-#last_reboot=$(last reboot | sed 's/.*generic //g' | cut -f1 -d'-' | head -n1)
 last_reboot=$(uptime -s)
 
 if [[ -f /var/run/reboot-required ]]; then
 # Echo for logging purposes
-	echo "reboot_notif: "$HOSTNAME" requires a reboot. Last reboot was on "$last_reboot""
+	echo "$0: "$HOSTNAME" requires a reboot. Last reboot was on "$last_reboot""
 	/usr/bin/shuttle -p -n "$device" "$(echo "$HOSTNAME"): reboot required" "Last reboot was on $(echo "$last_reboot")"
 fi

@@ -9,23 +9,26 @@
 # Device to send push notifications to
 device="all"
 
-# Check if hosts are available
-source ~/scripts/bin/hosts_check
+# Location of local disk copy of repo
+BASEDIR="$HOME/scripts/bin"
+
+# Check if machines are available before updating
+source "$BASEDIR"/hosts_check
 
 for i in "${HOSTS[@]}"; do
-echo "checklogs: Checking log files on host: $i"
+echo "$0: Checking log files on host: $i"
 # Pass $i and $device to remote host
 # Then, execute log size checking on remote host
 # Remote host must have SHuttle set up otherwise pushes won't be sent
-	ssh "$i" LC_i="$i" LC_device="$i" bash << 'EOF' 
+	ssh "$i" LC_0="$0" LC_i="$i" LC_device="$i" bash << 'EOF' 
 # Address to send mail notifications to
-mailto="root@$LC_i"
+mailto="root@$aurorabox"
 logsizes=$(ls -alh /var/log | awk '{ print $5 "   " $9 }' | grep 'G')
 
 if [[ -n "$logsizes" ]]; then
-	echo "checklogs: Large log file(s) detected!" 
+	echo "$LC_0: Large log file(s) detected!" 
 	echo -e "$logsizes" | mail -s "checklogs: Large log files detected!" "$mailto"
-	/usr/bin/shuttle -p -n "$LC_device" "$LC_i: Large log files detected!" "$logsizes"
+		/usr/bin/shuttle -p -n "$LC_device" "$LC_i: Large log files detected!" "$logsizes"
 fi
 EOF
 done
