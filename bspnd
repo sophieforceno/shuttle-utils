@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# bspnd - Battery Status Push Notifier daemon - v1.0
+# bspnd - Battery Status Push Notifier daemon
 # 	By Andy Forceno <andy@aurorabox.tech>
 # 
 

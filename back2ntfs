@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Back2NTFS - v0.9.5
+# Back2NTFS 
 # by Andy Forceno <andy@aurorabox.tech>
 #
 # Tar /home/user and /etc on many remote hosts
