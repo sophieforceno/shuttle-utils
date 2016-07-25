@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# TODO: Check for Aurora at both IPs. If it's not there at LAN ip, check WIFI
-
 # hosts_check - Helper script that checks host connectivity
 # 	By Andy Forceno <andy@aurorabox.tech>
 # 
