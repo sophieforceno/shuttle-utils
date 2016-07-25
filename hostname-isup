@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# hostname-isup - Check if a host is up - v1.0 
+# hostname-isup - Check if a host is up
 # 	by Andy Forceno <andy@aurorabox.tech>
 #
 

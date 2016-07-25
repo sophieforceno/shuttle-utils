@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #
-# Smartmon - S.M.A.R.T. Diagnostic Info Push Notifier - v1.0
+# Smartmon - S.M.A.R.T. Diagnostic Info Push Notifier
 # 	by Andy Forceno <andy@aurorabox.tech>
 #
 # Checks SMART info for disks on remote hosts and pushes info to a device

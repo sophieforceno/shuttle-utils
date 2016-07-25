@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# update_all - Run package updates (apt-get) on multiple hosts via dsh - v0.5
+# update_all - Run package updates (apt-get) on multiple hosts via dsh
 # 	By Andy Forceno <andy@aurorabox.tech>
 #
 # INFO: This script requires Dsh, Distributed Shell

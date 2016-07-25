@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# smartmon_long - Long S.M.A.R.T. Test Results Push Notifier - v1.0
+# smartmon_long - Long S.M.A.R.T. Test Results Push Notifier
 # 	by Andy Forceno <andy@aurorabox.tech>
 #
 # Runs the long S.M.A.R.T. test for disks on remote hosts and pushes & mails results

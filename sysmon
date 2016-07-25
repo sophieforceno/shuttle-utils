@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# Sysmon - Check CPU/GPU temps and system load - v1.0
+# Sysmon - Check CPU/GPU temps and system load
 # 	By Andy Forceno <andy@aurorabox.tech>
 #
 # INFO: This script depends on sensors and nvclock
