@@ -7,11 +7,16 @@
 # This script could easily be expanded to include multiple hosts
 # You can borrow code from the hosts_check and spaced or smartmon scripts  :-)
 
+if [ -e "$HOME"/.config/shuttle-utils/shuttle-utils.conf ]; then
+	source "$HOME"/.config/shuttle-utils/shuttle-utils.conf
+else
+	echo "SHuttle-utils: Error: No config file found!"
+	exit 1
+fi
+
+# TODO: Move user-defined vars to shuttle-utils.conf
 # Host IP address and name
 host_addr="192.168.1.2"
-
-# Device to send push to
-device="phone"
 
 # How often to ping host
 sleep_time="2m"

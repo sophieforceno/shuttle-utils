@@ -5,13 +5,10 @@
 # 
 
 # INFO: Source via Bash before executing other tasks on remote hosts
+# INFO: You must populate $conf_path/.hosts with your hosts!
 
-# Location of .hosts config file 
-# INFO: You must create this file and populate it
-CONFIG_PATH="$HOME/.config/shuttle-utils"
-
-# Hosts (ideally will have key-based, passwordless ssh auth)
-HOSTS=($(cat "$CONFIG_PATH/.hosts" | tr '\n' ' '))
+# Hosts (ideally, will have key-based, passwordless ssh auth)
+HOSTS=($(cat "$conf_path/.hosts" | tr '\n' ' '))
 
 # Check if machines are available before syncing
 for i in "${HOSTS[@]}"; do

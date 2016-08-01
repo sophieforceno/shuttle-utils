@@ -9,18 +9,18 @@
 # Will run bspnd in the background while suppressing output
 #
 
+# TODO: Eventually move user-defined vars to sguttle-utils.conf
 # Device to send pushes to (can be "all")
 device="phone"
 
-# I keep this at an amount that I consider safe. 
+# I keep this at an amount that I consider safe (ymmv) 
 # Large intervals could cause you to get one (or no) notification before your battery dies
-# Personally, I sometimes ignore the 1st notification, so a 2nd is nice :-)
 interval="7m"
 
 # Battery percentage when we should send a low battery notification
 warn_level="25"
 
-full_flag=0
+is_full=0
 
 # Initial percentage used to determine if battery is charging or discharging
 prev_percent=$(acpi | awk '{ gsub(/[^ 0-9]/, ""); print $2 }')
@@ -33,17 +33,17 @@ while true; do
 # Warn user to plug into power source if remaining capacity is below user-defined threshold
 # and if the battery level is decreasing
 	if [ "$percent" -le "$warn_level" ] && [ "$prev_percent" -gt "$percent" ]; then
-		/usr/bin/shuttle -p -n "$device" "$hostname: Plug in now" "Battery is at $percent percent"
+		shuttle_path/shuttle -p -n "$device" "$hostname: Plug in now" "Battery is at $percent percent"
 	fi		
 # If battery is fully charged and we haven't notified user yet
-	if [ "$percent" -eq "100" ] && [ "$full_flag" -eq "0" ]; then
-		/usr/bin/shuttle -p -n "$device" "$hostname: Battery charged" "Battery is at $percent percent"
-		full_flag=1
+	if [ "$percent" -eq "100" ] && [ "$is_full" -eq "0" ]; then
+		shuttle_path/shuttle -p -n "$device" "$hostname: Battery charged" "Battery is at $percent percent"
+		is_full=1
 	fi
 # If percentage < 100, the battery isn't full so,
 # set a flag so future iterations know it's not full
 	if [ "$percent" -lt "100" ]; then
-		full_flag=0
+		is_full=0
 	fi
 	
 	sleep "$interval"

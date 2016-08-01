@@ -10,34 +10,56 @@
 # And run the long test weekly (see smartmon_long)
 # You will need passwordless-sudo on the remote devices to automate this script
 
-# Device to send push notifications to
-device="phone"
-
-# Drive to scan
-# Currently only supports a single drive
-drive="/dev/sda"
-
-# User to send reports to 
-mailto="root@aurorabox"
-
-# Location of local disk copy of repo
-BASEDIR="$HOME/scripts/bin"
+if [ -e "$HOME"/.config/shuttle-utils/shuttle-utils.conf ]; then
+	source "$HOME"/.config/shuttle-utils/shuttle-utils.conf
+else
+	echo "SHuttle-utils: Error: No config file found!"
+	exit 1
+fi
 
 # Check if hosts are available before running remote SMART tests
-source "$BASEDIR"/hosts_check
-
-# Remove Host from hosts array, it has no hard disks
-# HOSTS=($(echo "${HOSTS[@]}" | sed -e "s/Hostname//g"))
+source "$bin_path"/hosts_check
 
 # Iterate through hosts list
-for j in "${HOSTS[@]}"; do
-echo -e "$0: SMART Test for host: $j"
-	smart_test=$(ssh "$j" "sudo smartctl -a $drive")
-	smart_result=$(echo "$smart_test" | head -n30 | grep "overall-health" | awk -F': ' '{ print $2 }')
-echo -e "$0: $smart_result"
+for i in "${HOSTS[@]}"; do
+echo -e "smartmon: SMART Test for host: $i"
+ssh "$i" LC_i="$i" LC_percent="$percent" LC_mailto="$mailto" LC_conf_path="$conf_path" LC_shuttle_path="$shuttle_path" LC_DRIVES="${DRIVES[@]}" bash << 'EOF' 
+	for j in ${LC_DRIVES[@]}; do
+		smart_test=$(sudo smartctl -a "$j" 2>/dev/null)
+		smart_result=$(echo "$smart_test" | head -n30 | grep "overall-health" | awk -F': ' '{ print $2 }' 2>/dev/null)
+	done
+#echo -e "smartmon: $smart_result"
 # Only notify if test fails so we don't swamp the poor sys admin
 	if [[ -n "$smart_result" && "$smart_result" != "PASSED" ]]; then
 		# echo "$smart_test" | mail -s "$j: SMART Diagnostics for $drive" "$mailto"
-		/usr/bin/shuttle -p -n "$device" "$host: SMART Diagnostic info" "$drive $smart_result at $(echo "$(date +%R) on $(date +%m-%d-%y)")"
+		"$shuttle_path"/shuttle -p -n "$device" "$LC_i: SMART Diagnostic info" "$drive $smart_result at $(echo "$(date +%R) on $(date +%m-%d-%y)")"
 	fi
+
+# Read in saved SMART attribute values
+if [[ -e $LC_conf_path/.smart-attribs ]]; then
+	prev_realloc=$(awk -F, '{ print $1 }' $LC_conf_path/.smart-attribs)
+	prev_pending=$(awk -F, '{ print $2 }' $LC_conf_path/.smart-attribs)
+	prev_offline=$(awk -F, '{ print $2 }' $LC_conf_path/.smart-attribs)
+fi
+
+# Bad sectors that were moved
+realloc=$(echo -e "$smart_test" | awk '/Reallocated_Sector_Ct/ { print $10 }')
+# Bad sectors not yet corrected
+pending=$(echo -e "$smart_test" | awk '/Current_Pending_Sector/ { print $10 }')
+# Uncorrectable sector count
+offline=$(echo -e "$smart_test" | awk '/Offline_Uncorrectable/ { print $10 }')
+
+# Delta values
+realloc_delta=$((realloc-prev_realloc))	
+pending_delta=$((pending-prev_pending))
+offline_delta=$((offline-prev_offline))
+
+if [[ "$realloc_delta" > 0 || "$pending_delta" > 0 || "$offline_delta" > 0 ]]; then
+	"$shuttle_path"/shuttle -p -n all "$HOSTNAME: SMART values have changed!" "Changes: Reallocated +$realloc_delta, Pending +$pending_delta, Offline +$offline_delta"
+fi
+
+touch $LC_conf_path/.smart-attribs
+echo "$realloc,$pending,$offline" > "$LC_conf_path"/.smart-attribs
+EOF
 done
+

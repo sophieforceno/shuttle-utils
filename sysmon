@@ -1,37 +1,34 @@
 #! /bin/bash
 
-# Sysmon - Check CPU/GPU temps and system load
+# Sysmon - Check CPU/GPU temps and system load 
 # 	By Andy Forceno <andy@aurorabox.tech>
 #
 # INFO: This script depends on sensors and nvclock
 
-# If any hosts have an Nvidia card, set this to yes
-# You must add all hostnames to conditional on line 29
-# like so: if [[ "$LC_i" = "Host 1" || "Host 2" || "Host 3" ]], then
-nvcard="yes"
+# If any hosts have an Nvidia card, set nvcard=yes in $conf_path/shuttle-utils.conf
+# You must add all hostnames to conditional on line 29 like so: 
+# if [[ "$LC_i" = "Host 1" || "Host 2" || "Host 3" ]], the
 
-# Send push notif when CPU/GPU goes above this value
-temp_thresh="90"
-
-# Send push notif when load (1 min average) goes above this value
-load_thresh="5"
-
-# Location of local disk copy of repo
-BASEDIR="/home/andy/scripts/bin"
+if [ -e "$HOME"/.config/shuttle-utils/shuttle-utils.conf ]; then
+	source "$HOME"/.config/shuttle-utils/shuttle-utils.conf
+else
+	echo "SHuttle-utils: Error: No config file found!"
+	exit 1
+fi
 
 # Check if machines are available before updating
-source "$BASEDIR"/hosts_check
+source "$bin_path"/hosts_check
 
 for i in "${HOSTS[@]}"; do
 # Pass local vars to remote hosts
-	ssh "$i" LC_0="$0" LC_i="$i" LC_nvcard="$nvcard" LC_percent="$percent" LC_temp_thresh="$temp_thresh" LC_load_thresh="$load_thresh" bash << 'EOF' 
+	ssh "$i" LC_i="$i" LC_nvcard="$nvcard" LC_percent="$percent" LC_temp_thresh="$temp_thresh" LC_load_thresh="$load_thresh" LC_shuttle_path="$shuttle_path" bash << 'EOF' 
 	if [[ "$LC_nvcard" = "yes" ]]; then
 		if [[ "$LC_i" = "Aurorabox" ]]; then 		# INFO: Add all hosts with Nvidia cards here
 			temp=$(sudo nvclock -T | tail -n1 | awk '{ print $4 }' | sed 's/C//g')
-			# echo -e "$LC_0: $LC_i: GPU temperature: \t $(echo "$temp" | sed 's/$/°C/g')"
+			# echo -e "sysmon: $LC_i: GPU temperature: \t $(echo "$temp" | sed 's/$/°C/g')"
 		else
 			temp=$(sensors -u | awk -F: '/temp1_input/ { print $2 }' | head -n1 | sed 's/\..*$//g')
-			# echo -e "$LC_0: $LC_i: CPU temperature: \t $(echo "$temp" | sed 's/$/°C/g')"
+			# echo -e "sysmon: $LC_i: CPU temperature: \t $(echo "$temp" | sed 's/$/°C/g')"
 		fi
 	fi
 
@@ -40,11 +37,11 @@ for i in "${HOSTS[@]}"; do
 
 # Evaluate temps, send push if > threshold
 	if (( "$temp" >= "$LC_temp_thresh" )); then
-		/usr/bin/shuttle -p -n all "$LC_i: Temperatures above $(echo "$LC_temp_thresh" | sed 's/\..*$/°C/g') detected!" "Current temperature: $LC_temp at $(date +%H:%M) on $(date +%Y-%m-%d)"
+		"$shuttle_path"/shuttle -p -n all "$LC_i: Temperatures above $(echo "$LC_temp_thresh" | sed 's/\..*$/°C/g') detected!" "Current temperature: $LC_temp at $(date +%H:%M) on $(date +%Y-%m-%d)"
 	fi
 
 	if (( "$load_int" > "$LC_load_thresh" )); then
-		shuttle -p -n all "$LC_i: System load above $(echo "$LC_load_thresh") detected!" "Current load: $load_raw at $(date +%H:%M) on $(date +%Y-%m-%d)"
+		"$LC_shuttle_path"/shuttle -p -n all "$LC_i: System load above $(echo "$LC_load_thresh") detected!" "Current load: $load_raw at $(date +%H:%M) on $(date +%Y-%m-%d)"
 	fi
 EOF
 done

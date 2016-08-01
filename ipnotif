@@ -10,23 +10,28 @@
 
 # This script is brought to you by the music of Natasha Kmeto: https://soundcloud.com/natashakmeto
 
-# Location of local
-CONFIGDIR="$HOME/.config/shuttle-utils"
-
-# The device to push notifications to
-device="all"
-
-# Last known IP
-last_ip=$(tac $CONFIGDIR/.iphist | grep -m 1 '.' | awk '{print $4}')
+if [ -e "$HOME"/.config/shuttle-utils/shuttle-utils.conf ]; then
+	source "$HOME"/.config/shuttle-utils/shuttle-utils.conf
+else
+	echo "SHuttle-utils: Error: No config file found!"
+	exit 1
+fi
 
 # API call to obtain IP address
 # See: https://www.ipify.org/
 new_ip=$(curl -s 'https://api.ipify.org?format=text')
 
-if [[ "$last_ip" != "$new_ip" ]]; then
-	/usr/bin/shuttle -p -n "$device" "$HOSTNAME: External IP address change" "Current IP: $new_ip"
+# Last known IP
+if [ -e "$conf_path/.iphistory" ]; then
+	last_ip=$(tac "$conf_path"/.iphistory | grep -m 1 '.' | awk '{print $4}')
+	if [[ "$last_ip" != "$new_ip" ]]; then
+		$shuttle_path/shuttle -p -n "$device" "$HOSTNAME: External IP address change" "Current IP: $new_ip"
+	fi
 # Write date & address to file for IP address history
-	echo "$(date "+%D %H:%M") - $new_ip" >> "$CONFIGDIR"/.iphist
+else 
+	touch "$conf_path/.iphistory" 
+fi	
+echo "$(date "+%D %H:%M") - $new_ip" >> $conf_path/.iphistory
 fi
 
 

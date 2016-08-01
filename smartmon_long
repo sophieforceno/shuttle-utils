@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# smartmon_long - Long S.M.A.R.T. Test Results Push Notifier
+# smartmon_long - Long S.M.A.R.T. Test Results Push Notifier 
 # 	by Andy Forceno <andy@aurorabox.tech>
 #
 # Runs the long S.M.A.R.T. test for disks on remote hosts and pushes & mails results
@@ -10,33 +10,27 @@
 
 # TODO: Full SMART test results aren't being pushed. API seems to interpret something in the smartctl output incorrectly
 
-# Device to send push notifications to
-device="chrome"
-
-# Drive to scan on remote host
-drive="/dev/sda"
-
-# Location of local disk copy of repo
-BASEDIR="$HOME/scripts/bin"
+if [ -e "$HOME"/.config/shuttle-utils/shuttle-utils.conf ]; then
+	source "$HOME"/.config/shuttle-utils/shuttle-utils.conf
+else
+	echo "SHuttle-utils: Error: No config file found!"
+	exit 1
+fi
 
 # Check if hosts are available before running remote SMART tests
-source "$BASEDIR"/hosts_check
+source "$bin_path"/hosts_check
 
-# Remove host from hosts array, it has no hard disks
-# HOSTS=($(echo "${HOSTS[@]}" | sed -e "s/Hostname//g"))
-# user@host to send mail to (enabled by default)
-mailto="root@aurorabox"
+# TODO: Add for j in DRIVES array loop 
 # Iterate through hosts list
 for i in "${HOSTS[@]}"; do
 	echo "Smartmon_long: Connecting to: $i"
 	# Pass locally-declared vars to remote host
-	ssh "$i" LC_0="$0" LC_i="$i" LC_drive="$drive" LC_device="$device" LC_mailto="$mailto" bash << 'EOF' 
-	echo -e "$LC_0: Begin SMART long test for host: $LC_i"
-   	sudo smartctl -t long "$LC_drive" && wait $!
-    long_results=$(sudo smartctl -l selftest "$LC_drive")
-  #	echo -e "$LC_0: self-test results for $LC_i: $long_results"
-	# TODO: Mailing of test results is enabled by default, until I verify full test results are being pushed
-    echo -e "$(date +%R) on $(date +%m-%d-%y):\n $long_results" | mail -s "$LC_i: SMART long test for $LC_drive" "$LC_mailto"
-    /usr/bin/shuttle -p -n "$LC_device" "$LC_i: SMART Long Test" "$LC_drive: $long_results at $(echo "$(date +%R) on $(date +%m-%d-%y)")"
+	ssh "$i" LC_i="$i" LC_drive="$drive" LC_device="$device" LC_mailto="$mailto" LC_shuttle_path="$shuttle_path" bash << 'EOF' 
+	echo -e "smartmon_long: Begin SMART long test for host: $LC_i"
+   	sudo smartctl -t long "$LC_drive" 2>/dev/null && wait $!
+    long_results=$(sudo smartctl -l selftest "$LC_drive" 2>/dev/null)
+  # echo -e "smartmon_long: self-test results for $LC_i: $long_results"
+  # echo -e "$(date +%R) on $(date +%m-%d-%y):\n $long_results" | mail -s "$LC_i: SMART long test for $LC_drive" "$LC_mailto"
+    "$LC_shuttle_path"/shuttle -p -n "$LC_device" "$LC_i: SMART Long Test" "$LC_DRIVES: $long_results at $(echo "$(date +%R) on $(date +%m-%d-%y)")"
 EOF
 done

@@ -5,14 +5,18 @@
 #
 # Sends a push notification to specified device if a reboot is needed 
 
-# Device to send push notification to
-device="phone"
+if [ -e "$HOME"/.config/shuttle-utils/shuttle-utils.conf ]; then
+	source "$HOME"/.config/shuttle-utils/shuttle-utils.conf
+else
+	echo "SHuttle-utils: Error: No config file found!"
+	exit 1
+fi
 
 # Last reboot date/time
 last_reboot=$(uptime -s)
 
 if [[ -f /var/run/reboot-required ]]; then
 # Echo for logging purposes
-	echo "$0: "$HOSTNAME" requires a reboot. Last reboot was on "$last_reboot""
-	/usr/bin/shuttle -p -n "$device" "$(echo "$HOSTNAME"): reboot required" "Last reboot was on $(echo "$last_reboot")"
+	echo "$reboot_notif: "$HOSTNAME" requires a reboot. Last reboot was on "$last_reboot""
+	"$shuttle_path"/shuttle -p -n "$device" "$(echo "$HOSTNAME"): reboot required" "Last reboot was on $(echo "$last_reboot")"
 fi

@@ -1,83 +1,74 @@
 #!/bin/bash
 
 #
-# Back2NTFS 
+# Back2NTFS
 # by Andy Forceno <andy@aurorabox.tech>
 #
 # Tar /home/user and /etc on many remote hosts
 # Copy to an NTFS NAS device & create and verify SHA1 checksums
 # To be run bi-weekly via cron
 #
-
-# Location of local disk copy of repo
-BASEDIR="$HOME/scripts/bin"
-
-# Location to log to on each host specified in hosts_check
-CONFIG_PATH="$HOME/.config/shuttle-utils"
-
-# Path to backup dir
-BACKUP_PATH="/media/andy/external/Backups"
+if [ -e "$HOME"/.config/shuttle-utils/shuttle-utils.conf ]; then
+  source "$HOME"/.config/shuttle-utils/shuttle-utils.conf
+else
+  echo "SHuttle-utils: Error: No config file found!"
+  exit 1
+fi
 
 # TODO: Add TARGET_DIRS array eventually
 # TARGET_DIRS=("/home/andy" "/etc")
 
 # Check if machines are available before updating
-source "$BASEDIR"/hosts_check
+source "$bin_path"/hosts_check
 
-# Remove Hostname from hosts array, it has no hard disks
-# HOSTS=($(echo "${HOSTS[@]}" | sed -e "s/Hostname//g"))
-
-echo -e "$0: ***** Begin back2ntfs.sh *****\n"
-echo -e "$0: See "$CONFIG_PATH/back2ntfs-$(date +%m%d%y).log" on each host for individual backup logs"
+echo -e "Back2NTFS: ***** Begin back2ntfs.sh *****\n"
+echo -e "Back2NTFS: See "$conf_path/back2ntfs-$(date +%m%d%y).log" on each host for individual backup logs"
 
 for i in "${HOSTS[@]}"; do
   echo "Connecting to: $i"
   # Pass locally-declared vars to remote host
-  ssh "$i" LC_0="$0" LC_i="$i" LC_basedir="$BASEDIR" LC_config_path="$CONFIG_PATH" LC_backup_path="$BACKUP_PATH" bash -x << 'EOF' 
+  ssh "$i" LC_i="$i" LC_bin_path="$bin_path" LC_conf_path="$conf_path" LC_backup_path="$backup_path" LC_shuttle_path="$shuttle_path" bash -x << 'EOF' 
 
-  # If $CONFIG_PATH doesn't exist, create it
-  if [ ! -d "$LC_config_path" ]; then
-    mkdir "$LC_config_path"
+  # If $conf_path doesn't exist, create it
+  if [ ! -d "$LC_conf_path" ]; then
+    mkdir "$LC_conf_path"
   fi
 # Create the log file
-  touch "$LC_config_path"/back2ntfs-$(date +%m%d%y).log
+  touch "$LC_conf_path"/back2ntfs-$(date +%m%d%y).log
 
   # Backup /home/andy
-  echo -e "$LC_0: $LC_i: Creating tar file of /home/andy in "$LC_backup_path"/"$LC_i"...\n" >> "$LC_config_path"/back2ntfs-$(date +%m%d%y).log
-  sudo touch "$LC_backup_path"/"$LC_i"/home-$(date +%m%d%y).tar >> "$LC_config_path"/back2ntfs-$(date +%m%d%y).log
+  echo -e "Back2NTFS: $LC_i: Creating tar file of /home/andy in "$LC_backup_path"/"$LC_i"...\n" >> "$LC_conf_path"/back2ntfs-$(date +%m%d%y).log
+  sudo touch "$LC_backup_path"/"$LC_i"/home-$(date +%m%d%y).tar >> "$LC_conf_path"/back2ntfs-$(date +%m%d%y).log
   # Exclude caches, and most folders that begin with a dot
-  # INFO: You should edit the contents of .excludes in your local copy of shuttle-utils to match the correct paths on your device
-  tar -X "$LC_basedir"/.excludes --exclude-caches-all -cvPf "$LC_backup_path"/"$LC_i"/home-$(date +%m%d%y).tar /home/andy >> "$LC_config_path"/back2ntfs-$(date +%m%d%y).log && wait
-  # SHA1 checksum creation is now done in the loop below
-  # sha1sum "$LC_backup_path"/"$LC_i"/home-$(date +%m%d%y).tar > "$LC_backup_path"/"$LC_i"/home-$(date +%m%d%y).tar.sha1 >> "$LC_config_path"/back2ntfs-$(date +%m%d%y).log 
+  # INFO: You should edit $conf_path/.excludes to match the correct paths on your device
+  tar -X "$LC_conf_path"/.excludes --exclude-caches-all -cvPf "$LC_backup_path"/"$LC_i"/home-$(date +%m%d%y).tar /home/andy >> "$LC_conf_path"/back2ntfs-$(date +%m%d%y).log && wait
 
   # Backup /etc
-  echo -e "$LC_0: $LC_i: Creating tar file of /etc in "$LC_backup_path"/"$LC_i"...\n" >> "$LC_config_path"/back2ntfs-$(date +%m%d%y).log
+  echo -e "Back2NTFS: $LC_i: Creating tar file of /etc in "$LC_backup_path"/"$LC_i"...\n" >> "$LC_conf_path"/back2ntfs-$(date +%m%d%y).log
 # TODO: Log file is not created on some hosts (permissions issue?)
-  sudo touch "$LC_backup_path"/"$LC_i"/etc-$(date +%m%d%y).tar >> "$LC_config_path"/back2ntfs-$(date +%m%d%y).log
-  sudo tar --exclude-caches-all -cvPf "$LC_backup_path"/"$LC_i"/etc-$(date +%m%d%y).tar /etc >> "$LC_config_path"/back2ntfs-$(date +%m%d%y).log && wait
- # sha1sum "$LC_backup_path"/"$LC_i"/etc-$(date +%m%d%y).tar > "$LC_backup_path"/"$LC_i"/etc-$(date +%m%d%y).tar.sha1 >> "$LC_config_path"/back2ntfs-$(date +%m%d%y).log
+  sudo touch "$LC_backup_path"/"$LC_i"/etc-$(date +%m%d%y).tar >> "$LC_conf_path"/back2ntfs-$(date +%m%d%y).log
+  sudo tar --exclude-caches-all -cvPf "$LC_backup_path"/"$LC_i"/etc-$(date +%m%d%y).tar /etc >> "$LC_conf_path"/back2ntfs-$(date +%m%d%y).log && wait
 EOF
 
   # Location of backups on host executing back2ntfs 
   # In my case this is different than the location on remote hosts
   cd /media/external/Backups/"$i"/
   # Find and delete .tar and .sha1 files older than 2 months (should preserve 1 old backup)
-  echo "$LC_0: Deleting old backups..."
+  echo "Back2NTFS: Deleting old backups..."
   find . -type f \( -iname \*.tar -o -iname \*.sha1 \) -mtime +60 -exec rm -i -f {} \+ 
 
   ## Create and verify SHA1 checksums for new backups 
   for j in $(find . -name '*.tar'); do
-    echo "$LC_0: Creating SHA1 checksum of "$BACKUP_PATH"/"$i"/$(echo "$j" | sed -e 's#\.\/##g')..."
+    echo "Back2NTFS: Creating SHA1 checksum of "$backup_path"/"$i"/$(echo "$j" | sed -e 's#\.\/##g')..."
     sha1sum "$j" > "$j.sha1" && wait
-    echo "$LC_0: Verifying SHA1 checksum of "$BACKUP_PATH"/"$i"/$(echo "$j" | sed -e 's#\.\/##g')..."
+    echo "Back2NTFS: Verifying SHA1 checksum of "$backup_path"/"$i"/$(echo "$j" | sed -e 's#\.\/##g')..."
     sha1sum -c "$j.sha1" && wait $!
     
     if [[ "$?" = "1" ]]; then
-      /usr/bin/shuttle -p -n all "$i: Bad checksum!" "$j failed checksum verification at $(echo "$(date +%R) on $(date +%m-%d-%y)")"
+      "$shuttle_path"/shuttle -p -n all "$i: Bad checksum!" "$j failed checksum verification at $(echo "$(date +%R) on $(date +%m-%d-%y)")"
     fi
   done
 done
 
-echo -e "$0: ***** End back2ntfs.sh ***** Goodbye!\n"
+echo -e "Back2NTFS: ***** End back2ntfs.sh ***** Goodbye!\n"
 

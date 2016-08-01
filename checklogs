@@ -1,34 +1,34 @@
 #! /bin/bash
 
 #
-# Checklogs - Check for very large log files 
+# Checklogs - Check for very large log files
 # 	by Andy Forceno <andy@aurorabox.tech>
 # 
 # Check for very large log files and alert the system administrator
 
-# Device to send push notifications to
-device="all"
-
-# Location of local disk copy of repo
-BASEDIR="$HOME/scripts/bin"
+if [ -e "$HOME"/.config/shuttle-utils/shuttle-utils.conf ]; then
+	source "$HOME"/.config/shuttle-utils/shuttle-utils.conf
+else
+	echo "SHuttle-utils: Error: No config file found!"
+	exit 1
+fi
 
 # Check if machines are available before updating
-source "$BASEDIR"/hosts_check
+source "$bin_path"/hosts_check
 
 for i in "${HOSTS[@]}"; do
-echo "$0: Checking log files on host: $i"
+echo "checklogs: Checking log files on host: $i"
 # Pass $i and $device to remote host
 # Then, execute log size checking on remote host
 # Remote host must have SHuttle set up otherwise pushes won't be sent
-	ssh "$i" LC_0="$0" LC_i="$i" LC_device="$i" bash << 'EOF' 
+	ssh "$i" LC_i="$i" LC_device="$i" LC_shuttle_path="$shuttle_path" LC_mailto="$mailto" bash << 'EOF' 
 # Address to send mail notifications to
-mailto="root@$aurorabox"
 logsizes=$(ls -alh /var/log | awk '{ print $5 "   " $9 }' | grep 'G')
 
 if [[ -n "$logsizes" ]]; then
-	echo "$LC_0: Large log file(s) detected!" 
-	echo -e "$logsizes" | mail -s "checklogs: Large log files detected!" "$mailto"
-		/usr/bin/shuttle -p -n "$LC_device" "$LC_i: Large log files detected!" "$logsizes"
+	echo "checklogs: Large log file(s) detected!" 
+	echo -e "$logsizes" | mail -s "checklogs: Large log files detected!" "$LC_mailto"
+		"$shuttle_path"/shuttle -p -n "$LC_device" "$LC_i: Large log files detected!" "$logsizes"
 fi
 EOF
 done

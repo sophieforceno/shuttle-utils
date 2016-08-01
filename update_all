@@ -5,58 +5,59 @@
 #
 # INFO: This script requires Dsh, Distributed Shell
 
-# Location of local disk copy of repo
-BASEDIR="/home/andy/scripts/bin"
+if [ -e "$HOME"/.config/shuttle-utils/shuttle-utils.conf ]; then
+	source "$HOME"/.config/shuttle-utils/shuttle-utils.conf
+else
+	echo "SHuttle-utils: Error: No config file found!"
+	exit 1
+fi
 
 # Check if machines are available before updating
-source "$BASEDIR"/hosts_check
+ source "$bin_path"/hosts_check
 
 # Output online hosts to DSH hosts group file
 printf '%s\n' "${HOSTS[@]}" > /etc/dsh/group/up
 
 # Full path to dpkg.log (user must have read permission)
-logfile="/var/log/dpkg.log"
+dpkg_log="/var/log/dpkg.log"
 
-# TODO: See if it will send dpkg update files from here
-config_path="~/.config/shuttle-utils"
-
-# Device to send package update push notifications to 
-device="all"
-
-# Set non-interactive frontend to avoid display issues with config file choice frontend
-export DEBIAN_FRONTEND="noninteractive"
 # Connect to each remote host specified in the /etc/dsh/group/up file and run apt-get update, upgrade, and autoremove
-dsh -v -g up sudo apt-get -qq update 
+dsh -vM -g up -c sudo apt-get -qq update 
+# Set non-interactive frontend to avoid display issues with config file choice frontend
 # Choose to preserve current config files on system, rather than package maintainer defaults 
-dsh -v -g up sudo apt-get -qq -o Dpkg::Options::="--force-confold" --force-yes -y upgrade
-dsh -v -g up sudo apt-get -qq --force-yes -y autoremove
+dsh -vM -g up -c DEBIAN_FRONTEND="noninteractive"
+dsh -vM -g up -c sudo apt-get -qq -o Dpkg::Options::="--force-confold" --force-yes upgrade
+dsh -vM -g up -c sudo apt-get -qq --force-yes autoremove && wait $!
 
 for i in "${HOSTS[@]}"; do
-	ssh "$i" LC_i="$i" LC_device="$device" LC_logfile="$logfile" bash << 'EOF'
+	ssh "$i" LC_i="$i" LC_device="$device" LC_dpkg_log="$dpkg_log" LC_conf_path="$conf_path" LC_shuttle_path="$shuttle_path" bash << 'EOF'
 	curr_date=$(date +%Y-%m-%d)
-	upgraded=$(awk '/upgrade/ && /'$curr_date'/ { print $1 "   " $4 }' "$LC_logfile" | sed -e 's/\:i386//g' -e 's/\:amd64//g' -e 's/\:all//g' -e 's/\:armhf//g' | sort | uniq)
+	upgraded=$(awk '/upgrade/ && /'$curr_date'/ { print $1 "   " $4 }' "$LC_dpkg_log" | sed -e 's/\:i386//g' -e 's/\:amd64//g' -e 's/\:all//g' -e 's/\:armhf//g' | sort | uniq)
 	# TODO: Some upgraded packages are matched here, not entirely sure why (they aren't listed in removed, so they aren't being removed and then re-installed)
-	installed=$(awk '/installed/ && /'$curr_date'/ { print $1 "   " $5 }' "$LC_logfile" | sed -e 's/\:i386//g' -e 's/\:amd64//g' -e 's/\:all//g' -e 's/\:armhf//g' | sort | uniq)
-	removed=$(awk '/remove/ && /'$curr_date'/ { print $1 "   " $4 }' "$LC_logfile" | sed -e 's/\:i386//g' -e 's/\:amd64//g' -e 's/\:all//g' -e 's/\:armhf//g' | sort | uniq)
+	installed=$(awk '/installed/ && /'$curr_date'/ { print $1 "   " $5 }' "$LC_dpkg_log" | sed -e 's/\:i386//g' -e 's/\:amd64//g' -e 's/\:all//g' -e 's/\:armhf//g' | sort | uniq)
+	removed=$(awk '/remove/ && /'$curr_date'/ { print $1 "   " $4 }' "$LC_dpkg_log" | sed -e 's/\:i386//g' -e 's/\:amd64//g' -e 's/\:all//g' -e 's/\:armhf//g' | sort | uniq)
 	
+	if [ ! -d "$LC_conf_path" ]; then
+		mkdir "$LC_conf_path"
+	fi
+	if [ ! -f "$LC_conf_path"/dpk-$curr_date ]; then
+		touch "$LC_conf_path"/dpkg-$curr_date
+	fi
 	# Export the recently installed packages to a file, and push that. File must be in cwd, otherwise Pushbullet doesn't push it (a bug in SHuttle, most likely)
 	# TODO: I was unsuccessful in getting Pushbullet API to send the raw data, presumably because of the way JSON handles multi-line text
-	echo -e "$LC_i:\nInstalled:\n------\n$installed\nUpgraded:\n------\n$upgraded\nRemoved:\n------\n$removed" | column > dpkg-$curr_date
-	# This is family member's PC, so pushes sent from it should go to my Pushbullet account, not their's 
-	if [[ -n "$upgraded" || -n "$installed" || -n "$removed" ]]; then
-		if [[ "$LC_i" = "Vivobook" ]]; then
-			LC_device="t4exanadu@gmail.com"	
+	echo -e "Package updates and removals on $LC_i\n\nInstalled:\n$installed\n\nUpgraded:\n$upgraded\n\nRemoved:\n$removed" > "$LC_conf_path"/dpkg-$curr_date
+
 		fi
-		/usr/bin/shuttle -p -f "$LC_device" "$LC_i: Package updates for $curr_date" "" "dpkg-$curr_date" 
-		rm -f dpkg-$curr_date
+		"$LC_shuttle_path"/shuttle -p -f "$LC_device" "$LC_i: Package updates for $curr_date" "" "$LC_conf_path/dpkg-$curr_date" 
+		rm -f "$LC_conf_path"/dpkg-$curr_date
 	# Pushbullet API won't send this. If you get it working, let me know or make a commit! :-)
+	# It probably requires some changes to shuttle
 		# shuttle -p -n "$LC_device" "$LC_i: Package updates for $curr_date" "$(echo -e "Installed:\n------\n$installed\nUpgraded:\n------\n$upgraded\nRemoved:\n------\n$removed" | column)"
 
 	# Aonther attempt. This sends everything, but newlines are removed
 		# shuttle -p -n "$LC_device" "$LC_i: Package updates for $curr_date" "$(printf '%s\n' $(<dpkg-$curr_date))"  
 
-	# Mailing of LAN hosts is broken on most of my Linux boxes, so this is not fully tested
-	# it should work fine, though!
+	# Mailing of LAN hosts is broken on most of my Linux boxes, so this is disabled for now
 		# echo -e "Installed:\n------\n$installed\nUpgraded:\n------\n$upgraded\nRemoved:\n------\n$removed" | column | mail -s "Updated packages for $curr_date" root@"$HOSTNAME"
 		fi
 EOF
