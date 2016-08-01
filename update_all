@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# update_all - Run package updates (apt-get) on multiple hosts via dsh
+# update_all - Run package updates (apt-get) on multiple hosts via dsh 
 # 	By Andy Forceno <andy@aurorabox.tech>
 #
 # INFO: This script requires Dsh, Distributed Shell
@@ -18,11 +18,8 @@ fi
 # Output online hosts to DSH hosts group file
 printf '%s\n' "${HOSTS[@]}" > /etc/dsh/group/up
 
-# Full path to dpkg.log (user must have read permission)
-dpkg_log="/var/log/dpkg.log"
-
 # Connect to each remote host specified in the /etc/dsh/group/up file and run apt-get update, upgrade, and autoremove
-dsh -vM -g up -c sudo apt-get -qq update 
+dsh -M -g up -c sudo apt-get -qq update 
 # Set non-interactive frontend to avoid display issues with config file choice frontend
 # Choose to preserve current config files on system, rather than package maintainer defaults 
 dsh -vM -g up -c DEBIAN_FRONTEND="noninteractive"
@@ -45,11 +42,11 @@ for i in "${HOSTS[@]}"; do
 	fi
 	# Export the recently installed packages to a file, and push that. File must be in cwd, otherwise Pushbullet doesn't push it (a bug in SHuttle, most likely)
 	# TODO: I was unsuccessful in getting Pushbullet API to send the raw data, presumably because of the way JSON handles multi-line text
-	echo -e "Package updates and removals on $LC_i\n\nInstalled:\n$installed\n\nUpgraded:\n$upgraded\n\nRemoved:\n$removed" > "$LC_conf_path"/dpkg-$curr_date
-
-		fi
+	if [[ -n "$installed" || -n "$upgraded" || -n "$removed" ]]; then
+		echo -e "Package updates and removals on $LC_i\n\nInstalled:\n$installed\n\nUpgraded:\n$upgraded\n\nRemoved:\n$removed" > "$LC_conf_path"/dpkg-$curr_date
 		"$LC_shuttle_path"/shuttle -p -f "$LC_device" "$LC_i: Package updates for $curr_date" "" "$LC_conf_path/dpkg-$curr_date" 
 		rm -f "$LC_conf_path"/dpkg-$curr_date
+	fi
 	# Pushbullet API won't send this. If you get it working, let me know or make a commit! :-)
 	# It probably requires some changes to shuttle
 		# shuttle -p -n "$LC_device" "$LC_i: Package updates for $curr_date" "$(echo -e "Installed:\n------\n$installed\nUpgraded:\n------\n$upgraded\nRemoved:\n------\n$removed" | column)"
@@ -57,9 +54,9 @@ for i in "${HOSTS[@]}"; do
 	# Aonther attempt. This sends everything, but newlines are removed
 		# shuttle -p -n "$LC_device" "$LC_i: Package updates for $curr_date" "$(printf '%s\n' $(<dpkg-$curr_date))"  
 
-	# Mailing of LAN hosts is broken on most of my Linux boxes, so this is disabled for now
+	# Mailing of LAN hosts is broken on most of my Linux boxes, so this is not fully tested
+	# it should work fine, though!
 		# echo -e "Installed:\n------\n$installed\nUpgraded:\n------\n$upgraded\nRemoved:\n------\n$removed" | column | mail -s "Updated packages for $curr_date" root@"$HOSTNAME"
-		fi
 EOF
 done
 
