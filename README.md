@@ -26,7 +26,7 @@ bspnd				Battery charge status push notifier daemon
 checklogs			Notify if system logs are greater than some size
 hostname-isup		Notify if host stops responding to pings
 hosts_check			Helper script to check if hosts are up (must be in same directory as the scripts that call it)
-					Used by: back2ntfs, checklogs, smartmon, smartmon_long, spaced
+					Used by: back2ntfs, checklogs, smartmon, smartmon_long, spaced, sysmon
 ipnotif				Notify when dynamic IP changes (requires curl)
 reboot_notif		Notify when a reboot is requred
 smartmon			Push SMART diagnostic info about drives on remote hosts
