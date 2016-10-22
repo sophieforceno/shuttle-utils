@@ -2,8 +2,8 @@ README.md
 
 **SHuttle-utils v0.9.8-(080116)**
 
-Shuttle-utils is a collection of Bash scripts for monitoring your Linux computer(s). They require SHuttle, availble here: https://github.com/andyforceno/shuttle
-
+SHuttle-utils is a collection of Bash scripts for monitoring your Linux computer(s). They require SHuttle, availble here: https://github.com/andyforceno/shuttle
+Some scripts require additional dependencies. Update_all relies on dsh (Distributed Shell), smartmon and smartmon_long require smartmontools, and sysmon requires sensors and nvclock
 
 # Installation:
     git clone https://github.com/andyforceno/shuttle-utils/
@@ -22,11 +22,11 @@ Shuttle-utils is a collection of Bash scripts for monitoring your Linux computer
 shuttle-utils contains the following scripts:
 
 back2ntfs			Create .tar archives, transfer to NAS device, and verify checksums
-bspnd				Battery charge status push notifier daemon
+bspnd				Battery charge status push notifier daemon (for laptops)
 checklogs			Notify if system logs are greater than some size
 hostname-isup		Notify if host stops responding to pings
 hosts_check			Helper script to check if hosts are up (must be in same directory as the scripts that call it)
-					Used by: back2ntfs, checklogs, smartmon, smartmon_long, spaced, sysmon
+					Used by: back2ntfs, checklogs, smartmon, smartmon_long, spaced, sysmon, update_all
 ipnotif				Notify when dynamic IP changes (requires curl)
 reboot_notif		Notify when a reboot is requred
 smartmon			Push SMART diagnostic info about drives on remote hosts
@@ -54,21 +54,30 @@ Other things I've used SHuttle for:
 
 
 # Changelong:
+v0.9.9-(102216):
+* All: All scripts converted to be piped to SHuttle v0.9.9+ (now accepts stdin for push bodies!)
+* Bspnd: Moved user-defined variables to shuttle-utils.conf - DONE
+* Hostname-isup: Moved user-defined variables to shuttle-utils.conf - DONE
+* Sysmon: Rewrote most of it; now you can specify different notification thresholds for CPU and GPU temp - DONE
+^ Smartmon: Now accepts an array of drives of different dev addresses [get technical name] - NOT DONE
+* Smartmon: Fixed remote variable names that prevented mailing & pushing of results
+* Spaced: Fixed bugs, rewrote most of it. Now uses $device in shuttle-utils.conf (somehow I missed this in v0.9.8!) - DONE
+* Checklogs: Better method of checking log sizes, added $logsize_thresh variable (set in shuttle-utils.conf) - DONE
+
 v0.9.8-(080116):
-* Now storing all user config scripts in ~/.config/shuttle-utils
-* New script, sysmon! Notify of high Nvidia GPU temp, CPU temp, and system load
-* Re-wrote update_all to use dsh (Distributed Shell, Dancers' SHell) to run concurrent updates
-* Moved (almost) all user-defined variables to shuttle-utils.conf
-* Smartmon now accepts an array of drives (for now, drives must be the same on all devices)
-* Small improvements to all scripts
+* Config: Now storing all user config scripts in ~/.config/shuttle-utils
+* Config: Moved (almost all) user-defined variables to shuttle-utils.conf
+* Sysmon: New script! Notify of high Nvidia GPU temp, CPU temp, and system load
+* Update_all: Rewrote to use dsh (Distributed Shell, Dancers' SHell) to run concurrent updates
+* Smartmon: Now accepts an array of drives (for now, drives must be the same /dev/sd* on all devices)
+* All: Small improvements to all scripts
 
 v0.9.7-(072416):
-* Re-wrote sysmon script (and forgot to include it, oops!)
-* Fixed bugs in smartmon_long, re-added to repo 
-* Added update_all (requires dsh, Distributed Shell)
-* Most scripts now have sending of mail disabled by default
-* hosts_check now reads hostnames from a newline-delimited list ~/.config/shuttle-utils/.hosts
-* Fixed mumerous bugs and code inconsistencies across scripts
+* Smartmon_long: Bugs fixed; re-added to repo 
+* Update_all: New script! Sequentially run apt-get on mulitple LAN hosts
+* Hosts_check: Now reads hostnames from a newline-delimited list ~/.config/shuttle-utils/.hosts
+* All: Most scripts now have sending of mail disabled by default
+* All: Fixed mumerous bugs and code inconsistencies across scripts
 
 
 # License:
