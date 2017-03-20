@@ -25,21 +25,21 @@ Most of these scripts are meant to be run from a central repository/server that 
 shuttle-utils contains the following scripts:
 
 apcstats.sh 			Pushes stats for APC UPSes (depends on: apcupsd)
-bspnd.sh				Battery charge status push notifier daemon (for laptops)
+bspnd.sh			Battery charge status push notifier daemon (for laptops)
 checklogs.sh			Notify if system logs are greater than some size
 hostname-isup.sh		Notify if host stops responding to pings
 hosts_check.sh			Helper script to check if hosts are up (must be in same directory as the script that calls it)
-						Used by: back2ntfs, checklogs, reboot_notif, smartmon, smartmon_long, spaced, sysmon, update_all
-ipnotif.sh				Notify when dynamic IP changes (depends on: curl)
-permaban.sh            	Push notify of hosts banned by the SSH-repeater filter for Fail2Ban, their auth attempts, and whois info (depends on: fail2ban)
-procmon.sh             	Monitor processes and notify of stopped processes
-rdiff_notify.sh        	Send push notifications of rdiff-backup session statistics
+				Used by: back2ntfs, checklogs, reboot_notif, smartmon, smartmon_long, spaced, sysmon, update_all
+ipnotif.sh			Notify when dynamic IP changes (depends on: curl)
+permaban.sh            		Push notify of hosts banned by the SSH-repeater filter for Fail2Ban, their auth attempts, and whois info (depends on: fail2ban)
+procmon.sh             		Monitor processes and notify of stopped processes
+rdiff_notify.sh        		Send push notifications of rdiff-backup session statistics
 reboot_notif.sh			Notify when a reboot is requred
 smartmon_health.sh		Push SMART drive health info on remote hosts (depends on: smartmontools)
 smartmon_test.sh		Run Smartctl long test on remote hosts (depends on: smartmontools)
-smartmon_results.sh     Push smartctl extended test results from remote hosts (depends on: smartmontools)
-spaced.sh				Low disk space notification daemon
-sysmon.sh               Notify of high CPU/GPU temperatures and system load
+smartmon_results.sh     	Push smartctl extended test results from remote hosts (depends on: smartmontools)
+spaced.sh			Low disk space notification daemon
+sysmon.sh               	Notify of high CPU/GPU temperatures and system load
 update_all.sh			Run system updates on many hosts via apt-get using dsh (Distributed Shell), and push updated packages list
 ```
 
