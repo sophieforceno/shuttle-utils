@@ -6,8 +6,8 @@
 # 
 
 # Usage:
-# 	./bspnd <device> > /dev/null 2>&1 &
-# Will run bspnd in the background while supressing output
+# 	./bspnd.sh <device> > /dev/null 2>&1 &
+# Will run bspnd.sh in the background while supressing output
 #
 # Alternatively, you can remove the loop and sleep command and execute from cron every n minutes
 

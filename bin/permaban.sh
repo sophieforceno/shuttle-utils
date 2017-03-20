@@ -10,7 +10,7 @@
 # Or see the comments beneath this script on GitHub
 #
 # This script works best via cron, for example:
-# 58 23  * * 5     /home/user/bin/permaban
+# 58 23  * * 5     /home/user/bin/permaban.sh
 # Will send the weekly report on Fridays at 11:58pm
 # It is recommended that you check to see when your auth.log is rotated, and have cron execute this just before rotation
 #

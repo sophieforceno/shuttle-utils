@@ -4,13 +4,13 @@
 #	by Andy Forceno <andy@aurorabox.tech>
 
 # Usage: 
-# Executing rdiff_notify without arguments will push latest session stats for all repos
-# To obtain session stats for one repo, execute: rdiff_notify repo_name
+# Executing rdiff_notify.sh without arguments will push latest session stats for all repos
+# To obtain session stats for one repo, execute: rdiff_notify.sh repo_name
 # Where `repo_name` is the directory name of the repo
 
 # It is recommended to execute this script after each cron backup job, like so:
-# Upon successful backup of host's home directory, run rdiff_notify to push latest session statistics for host
-# rdiff-backup -v5 --exclude-filelist /home/user/.rdiff-backup/host-home-excludes --print-statistics andy@host::/home /media/backups/host/home && sudo /home/user/scripts/bin/rdiff_notify host > /dev/null 2>&1
+# Upon successful backup of host's home directory, run rdiff_notify.sh to push latest session statistics for host
+# rdiff-backup -v5 --exclude-filelist /home/user/.rdiff-backup/host-home-excludes --print-statistics andy@host::/home /media/backups/host/home && sudo /home/user/scripts/bin/rdiff_notify.sh host > /dev/null 2>&1
 
 
 # INFO: If the user executing rdiff_notify does not own the repos (backup destination dirs)

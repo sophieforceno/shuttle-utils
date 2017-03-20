@@ -2,7 +2,7 @@ README.md
 
 **SHuttle-utils v1.0 (03-20-17)**
 
-SHuttle-utils is a collection of Bash scripts for monitoring your Linux computer(s). They require SHuttle, availble here: https://github.com/andyforceno/shuttle
+SHuttle-utils is a collection of Bash scripts for monitoring your Linux computer(s). All scripts require `SHuttle`, availble here: https://github.com/andyforceno/shuttle
 Some scripts require additional dependencies: `apcstats` depends on `apcupsd`, `update_all` relies on `dsh` (Distributed Shell), `rdiff_notify` depends on `rdiff-backup`, `smartmon_health`,`smartmon_test`, and `smartmon_results` all require `smartmontools`, and `sysmon` requires `lm-sensors` and, optionally, `nvclock`.
 
 Most of these scripts are meant to be run from a central repository/server that logs in to any number of remote hosts via SSH. As a result, full automation of many of the SHuttle-utils scripts requires passwordless SSH authentication and passwordless-sudo access, or some similar security arrangement that allows logging into remote hosts and executing commands as root without having to manually authenticate. For this reason, these scripts are meant to be run from behind a firewall inside a LAN. Lastly, some of these scripts will need to be adapted to your system. For example, `update_all` uses `apt-get`, so it will only work on Ubuntu-based distros.
