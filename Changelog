@@ -1,0 +1,46 @@
+### Changelong:
+v1.0 (03-20-17):
+* All: Better comments/documentation
+* All: Added shell script extension .sh to all script files
+* All: Added variable to specify user that logs in to remote hosts (See shuttle-utils.conf)
+* Apcstats: New script! Pushes statistics for APC UPSes (depends on: apcupsd)
+* Permaban: Fixed bug in calculating the starting date of the past week (for push & email subject lines)
+* Rdiff_notify: New script! Sends push notification of rdiff-backup session statistics
+* Smartmon*: All smartmon scripts fully support an array of drives
+* Smartmon*: Only tests or parses results from mounted drives
+* Smartmon_health: Stores pending, reallocated, and bad sector counts for each drive in array
+* Smartmon_health: Fixed numerous bugs
+* Smartmon_log: Renamed to smartmon_results.sh
+
+v0.9.9 (12-07-16):
+* All: All scripts converted to be piped to SHuttle v0.9.9+ (now accepts stdin for push bodies!)
+* All: Scripts now create missing configuration folder and files, if needed
+* Back2NTFS: Removed for now. It was far too unreliable (at least on my network). 
+* Checklogs: Better method of checking log sizes, added $logsize_thresh variable (set in shuttle-utils.conf)
+* Config: Added more per-script variables to shuttle-utils.conf
+* Hosts_check: Added error-checking for empty .hosts file
+* Hostname-isup: Now supports checking of multiple hosts; moved user-defined variables to shuttle-utils.conf 
+* Permaban: New script! Sends weekly pushes of hosts banned by Fail2Ban, invalid auth attempts, and whois info
+* Procmon: New script! Monitors processes and sends notifications of stopped processes
+* Sysmon: Rewrote most of it; now you can specify different notification thresholds for CPU and GPU temp
+* Smartmon_long: Now split into two scripts, smartmon_test (executes test) and smartmon_log (parses & pushes test results)
+* Smartmon_health: Fixed remote variable names that prevented mailing & pushing of results 
+* Smartmon_log: Check if hosts are still up since smartmon_test was last run
+* Spaced: Rewrote most of it and fixed many bugs. Now uses $device from shuttle-utils.conf (somehow I missed this in v0.9.8)
+
+v0.9.8 (08-01-16):
+* All: Small improvements to all scripts
+* Checklogs: New script! Checks for large log files 
+* Config: Now storing all user config scripts in ~/.config/shuttle-utils
+* Config: Moved (almost all) user-defined variables to shuttle-utils.conf
+* Sysmon: New script! Notify of high Nvidia GPU temp, CPU temp, and system load
+* Update_all: Rewrote to use dsh (Distributed Shell, Dancers' SHell) to run concurrent updates
+* Smartmon: Now accepts an array of drives (for now, drives must be the same /dev/sd* on all devices)
+
+
+v0.9.7 (07-24-16):
+* All: Most scripts now have sending of mail disabled by default
+* All: Fixed mumerous bugs and code inconsistencies across scripts
+* Hosts_check: Now reads hostnames from a newline-delimited list ~/.config/shuttle-utils/.hosts
+* Smartmon_long: Bugs fixed; re-added to repo 
+* Update_all: New script! Sequentially run apt-get on mulitple LAN hosts
