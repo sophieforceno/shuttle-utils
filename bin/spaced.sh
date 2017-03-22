@@ -46,7 +46,7 @@ for i in "${HOSTS[@]}"; do
 			j_dev_name=$(echo -e "$df_output" | sed -n $line_num'p' | awk '{ print $1 }' )
 		
 			echo "Spaced: $LC_i: $j_dev_name has $j_free_space% free space!"
-			echo -e "$df_heading\n$j_df_line" | mail -s "space.d: Low disk space for $j_dev_name" "$LC_mailto"
+			# echo -e "$df_heading\n$j_df_line" | mail -s "space.d: Low disk space for $j_dev_name" "$LC_mailto"
 			echo "$j_mount_point partition has $j_free_space% free space" | "$LC_shuttle_path"/shuttle -p -n "$LC_device" "$LC_i: Low disk space for $j_dev_name" 
 		fi
 	done

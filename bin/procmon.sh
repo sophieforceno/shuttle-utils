@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# procmon.sh - Monitors an array of processes and sends pushes informing of stopped processes
+# procmon - Monitors an array of processes and sends pushes informing of stopped processes
 #
 # 	By Andy Forceno <andy@aurorabox.tech>
 #
@@ -25,5 +25,5 @@ done
 
 # If there are any stopped processes, send a push notification
 if [[ "${#STOPPED[@]}" != 0 ]]; then
-	echo "${STOPPED[@]}" | sed 's/,.$//' | shuttle -p -n chrome "Stopped processes:"
+	echo "${STOPPED[@]}" | sed 's/,.$//' | shuttle -p -n "$device" "Stopped processes:"
 fi

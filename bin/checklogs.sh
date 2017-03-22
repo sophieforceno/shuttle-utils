@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #
-# Checklogs.sh - Check for very large log files
+# Checklogs - Check for very large log files
 # 	by Andy Forceno <andy@aurorabox.tech>
 # 
 # Check for very large log files and alert the system administrator

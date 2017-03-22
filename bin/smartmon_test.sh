@@ -1,11 +1,11 @@
 #! /bin/bash
 
-# smartmon_test.sh - Perform the S.M.A.R.T. Extended Test on many remote hosts
+# smartmon_test - Perform the S.M.A.R.T. Extended Test on many remote hosts
 # 	by Andy Forceno <andy@aurorabox.tech>
 #
 # Runs the long S.M.A.R.T. test for disks on remote hosts
 
-# INFO: To parse and push the test results, run smartmon_results.sh
+# To parse and push the test results, run smartmon_results
 
 if [ -e "$HOME"/.config/shuttle-utils/shuttle-utils.conf ]; then
 	source "$HOME"/.config/shuttle-utils/shuttle-utils.conf

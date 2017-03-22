@@ -41,7 +41,7 @@ for i in "${HOSTS[@]}"; do
 	#fi
 	# If there are updates of any kind, send a push to notifty of updates
 	if [[ -n "$installed" || -n "$upgraded" || -n "$removed" ]]; then
-		echo -e "Installed:\n$installed\n\nUpgraded:\n$upgraded\n\nRemoved:\n$removed" | column -t | shuttle -p -n chrome "$LC_i: Package updates for $curr_date"
+		echo -e "Installed:\n$installed\n\nUpgraded:\n$upgraded\n\nRemoved:\n$removed" | column -t | shuttle -p -n "$device" "$LC_i: Package updates for $curr_date"
 		
 	# INFO: Uncomment this to send the update log as a text file. Use this if you are having trouble pushing the updates list via pipe
 		# Export the recently installed packages to a file, and push that. File must be in cwd, otherwise Pushbullet doesn't push it (a limitation of SHuttle)

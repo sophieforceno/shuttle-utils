@@ -1,11 +1,11 @@
 #! /bin/bash
 
-# smartmon_results.sh - S.M.A.R.T. Extended Test Results Push Notifier
+# smartmon_result - S.M.A.R.T. Extended Test Results Push Notifier
 # 	by Andy Forceno <andy@aurorabox.tech>
 #
 
-# It is recommended to run this weekly via cron, after smartmon_test.sh
-# How long after depends on your systems and drives. I find a 4 hour gap effective.
+# It is recommended to run this weekly via cron, after smartmon_test
+# How long depends on your systems and drives. I find a 4 hour gap effective.
 
 # INFO: You will need passwordless-sudo on the remote devices to automate this script
 
@@ -56,7 +56,7 @@ for i in "${HOSTS[@]}"; do
   for j in "${TO_SCAN[@]}"; do
       curr_date=$(date +%Y-%m-%d)
       long_results=$(sudo smartctl -l selftest -d "$LC_disk_type" "$j")
-      echo -e "$(date +%R) on $(date +%m-%d-%y):\n $long_results" | mail -s "$LC_i: SMART extended test for $j" "$LC_mailto"
+    # echo -e "$(date +%R) on $(date +%m-%d-%y):\n $long_results" | mail -s "$LC_i: SMART extended test for $j" "$LC_mailto"
       printf "%s\n" "$long_results" | "$LC_shuttle_path"/shuttle -p -n "$LC_device" "$LC_i: SMART extended test results for $j"
     done
 EOF

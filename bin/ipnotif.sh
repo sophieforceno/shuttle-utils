@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# ipnotif.sh: IP Address Change Push Notifier
+# ipnotif: IP Address Change Push Notifier
 # by Andy Forceno <andy@aurorabox.tech>
 #
 

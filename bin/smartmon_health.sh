@@ -1,14 +1,14 @@
 #! /bin/bash
 
 #
-# smartmon_health.sh - S.M.A.R.T. Drive Health Push Notifier
+# smartmon_health - S.M.A.R.T. Drive Health Push Notifier
 # 	by Andy Forceno <andy@aurorabox.tech>
 #
 # Checks SMART drive health info for disks on remote hosts 
 # Pushes info when specific drive parameters change
 
 # It is recommeneded to run this daily via cron (as root user)
-# And run the long test weekly (see smartmon_test.sh and smartmon_results.sh)
+# And run the long test weekly (see smartmon_test and smartmon_results)
 
 if [ -e "$HOME"/.config/shuttle-utils/shuttle-utils.conf ]; then
 	source "$HOME"/.config/shuttle-utils/shuttle-utils.conf

@@ -22,14 +22,14 @@ for i in "${HOSTS[@]}"; do
 
 	# Evaluate CPU temp, send push if > threshold
 	if (( "$temp" >= "$LC_temp_thresh" )); then
-		"$shuttle_path"/shuttle -p -n all "$LC_i: Temperatures above $(echo "$LC_temp_thresh" | sed 's/\..*$/°C/g') detected!" "Current temperature: $LC_temp at $(date +%H:%M) on $(date +%Y-%m-%d)"
+		"$shuttle_path"/shuttle -p -n "$device" "$LC_i: Temperatures above $(echo "$LC_temp_thresh" | sed 's/\..*$/°C/g') detected!" "Current temperature: $LC_temp at $(date +%H:%M) on $(date +%Y-%m-%d)"
 	fi
 		# If host exists in ${NVCLOCK_HOSTS}, check the Nvidia GPU temp
 		if [[ "$HOSTNAME" =~ "${LC_NVCLOCK_HOSTS[@]}" ]]; then
 			gpu_temp=$(sudo nvclock -T | tail -n1 | awk '{ print $4 }' | sed 's/C//g')
 			# If $gpu_temp >= $gpu_temp_thresh, push a warning!
 			if (( "$gpu_temp" >= "$LC_gpu_temp_thresh" )); then
-				$shuttle_path/shuttle -p -n all "$LC_i: GPU temperatures above $(echo "$LC_gpu_temp_thresh" | sed 's/\..*$/°C/g') detected!" "Current temperature: $LC_gpu_temp at $(date +%H:%M) on $(date +%Y-%m-%d)"
+				$shuttle_path/shuttle -p -n "$device" "$LC_i: GPU temperatures above $(echo "$LC_gpu_temp_thresh" | sed 's/\..*$/°C/g') detected!" "Current temperature: $LC_gpu_temp at $(date +%H:%M) on $(date +%Y-%m-%d)"
 			fi
 		fi
 	# Check 5 minute system load, send warning if load > threshold
@@ -38,7 +38,7 @@ for i in "${HOSTS[@]}"; do
 	# load value as a whole number
 	load_int=$(echo "$load_raw" | sed 's/\..*//g')	
 	if (( "$load_int" > "$LC_load_thresh" )); then
-		"$LC_shuttle_path"/shuttle -p -n all "$LC_i: System load above $(echo "$LC_load_thresh") detected!" "Current load: $load_raw at $(date +%H:%M) on $(date +%Y-%m-%d)"
+		"$LC_shuttle_path"/shuttle -p -n "$device" "$LC_i: System load above $(echo "$LC_load_thresh") detected!" "Current load: $load_raw at $(date +%H:%M) on $(date +%Y-%m-%d)"
 	fi
 
 EOF

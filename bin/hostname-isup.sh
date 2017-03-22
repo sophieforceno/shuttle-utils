@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# hostname-isup.sh - Ping hosts to check if they're up  
+# hostname-isup - Ping hosts to check if they're up  
 # 	by Andy Forceno <andy@aurorabox.tech>
 #
 
