@@ -46,9 +46,9 @@ update_all.sh			Run system updates on many hosts via apt-get using dsh (Distribu
 
 # Notes:
 * With the exception of `bspnd` and `hosts_check`, all scripts are meant to be executed via cron
-* Most scripts are meant to be run from a central repository (server), with the exception of: `apcaccess` `bspnd`, `ipnotif`, `procmon`, `permaban`, and `rdiff_notify`
-* See the individual scripts for more information on each
-* SHuttle must be installed on all machines that the server will be sending push notifications from (if you figure out how to pass remote variables back to the localhost, let me know!)
+* Most scripts are meant to be run from a central repository (server), with the exception of: `ipnotif`, `procmon`, `permaban`, `rdiff_notify`, `apcstats` (for devices with a UPS connected), and `bspnd` (for laptops), 
+* See individual scripts for more information on each
+* SHuttle must be installed on all machines that the server will be sending push notifications from
 * If you run many of the scripts, it is recommended that you have their collective output saved to a separate log file such as `/var/log/shuttle-utils.log`, like so:
 ` cron job | /path/to/script/reboot_notif 2>&1 >> /var/log/shuttle-utils.log`
 * Don't forget to edit shuttle-utils.conf!
@@ -59,7 +59,7 @@ Other things I've used SHuttle for:
 * Notify me when a torrent downloaded on my laptop is copied to my torrent server
 * Notify me when an IP has been permanently banned using fail2ban (see permaban.sh in this repo)
 * Send occasional notifications of active connections to my webserver
-* Send me reminders to do X, where X is a mundane, oft-repeated task I somehow forget to do
+* Send me reminders to do X, where X is a mundane, oft-repeated task I somehow forget to do (cron + SHuttle)
 
 
 # License:
