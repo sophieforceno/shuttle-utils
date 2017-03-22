@@ -45,7 +45,7 @@ update_all.sh			Run system updates on many hosts via apt-get using dsh (Distribu
 
 # Notes:
 * With the exception of `bspnd` and `hosts_check`, all scripts are meant to be executed via cron
-* Most scripts are meant to be run from a central repository (server), with the exception of: `ipnotif`, `procmon`, `permaban`, `rdiff_notify`, `apcstats` (for devices with a UPS connected), and `bspnd` (for laptops), 
+* Most scripts are meant to run from a central repository (server) that logs into remote hosts, except for: `ipnotif`, `procmon`, `permaban`, `rdiff_notify`, `apcstats` (for devices with a UPS connected), and `bspnd` (for laptops), 
 * See individual scripts for more information on each
 * SHuttle must be installed on all machines that the server will be sending push notifications from
 * If you run many of the scripts, it is recommended that you have their collective output saved to a separate log file such as `/var/log/shuttle-utils.log`, like so:
