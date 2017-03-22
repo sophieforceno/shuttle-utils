@@ -4,7 +4,7 @@
 # 	By Andy Forceno <andy@aurorabox.tech>
 # 
 
-# Sourced from in each shuttle-utils script
+# Sourced within each SHuttle-utils script
 # You must populate $conf_path/hosts with your hosts!
 
 # Check if machines are available before syncing

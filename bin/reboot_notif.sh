@@ -17,7 +17,7 @@ source "$bin_path"/hosts_check.sh
 
 
 for i in "${HOSTS[@]}"; do
-# Pass local vars to remote hosts
+# Pass local variables to remote hosts
 	ssh "$user"@"$i" LC_i="$i" LC_device="$device" LC_shuttle_path="$shuttle_path" bash << 'EOF'
 
 	# Last reboot date/time
