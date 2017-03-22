@@ -57,7 +57,7 @@ Feel free to contribute new scripts or improve existing ones!
 Other things I've used SHuttle for:
 * Notify me when a torrent downloaded on my laptop is copied to my torrent server
 * Notify me when an IP has been permanently banned using fail2ban (see permaban.sh in this repo)
-* Send occasional notifications of active connections to my webserver
+* Send occasional notifications of active connections to my webserver serving a web app
 * Send me reminders to do X, where X is a mundane, oft-repeated task I somehow forget to do (cron + SHuttle)
 
 
