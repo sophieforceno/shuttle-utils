@@ -29,7 +29,6 @@ bspnd.sh			Battery charge status push notifier daemon (for laptops)
 checklogs.sh			Notify if system logs are greater than some size
 hostname-isup.sh		Notify if host stops responding to pings
 hosts_check.sh			Helper script to check if hosts are up (must be in same directory as the script that calls it)
-				Used by: back2ntfs, checklogs, reboot_notif, smartmon, smartmon_long, spaced, sysmon, update_all
 ipnotif.sh			Notify when dynamic IP changes (depends on: curl)
 permaban.sh            		Push notify of hosts banned by the SSH-repeater filter for Fail2Ban, their auth attempts, and whois info (depends on: fail2ban)
 procmon.sh             		Monitor processes and notify of stopped processes
