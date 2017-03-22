@@ -1,6 +1,6 @@
 README.md
 
-**SHuttle-utils v1.0 (03-20-17)**
+**SHuttle-utils v1.1 (03-21-17)**
 
 SHuttle-utils is a collection of Bash scripts for monitoring your Linux computer(s). All scripts require `SHuttle`, availble here: https://github.com/andyforceno/shuttle
 Some scripts require additional dependencies: `apcstats` depends on `apcupsd`, `update_all` relies on `dsh` (Distributed Shell), `rdiff_notify` depends on `rdiff-backup`, `smartmon_health`,`smartmon_test`, and `smartmon_results` all require `smartmontools`, and `sysmon` requires `lm-sensors` and, optionally, `nvclock`.

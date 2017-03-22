@@ -1,4 +1,8 @@
 ### Changelong:
+v1.1 (03-21-17):
+* All: Cleaned up mistakes, omissions, and other sloppy things I missed in v1.0
+* Permaban: Moved user-defined variables to shuttle-utils.conf
+
 v1.0 (03-20-17):
 * All: Better comments/documentation
 * All: Added shell script extension .sh to all script files
