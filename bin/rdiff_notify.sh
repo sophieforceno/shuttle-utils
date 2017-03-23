@@ -3,14 +3,18 @@
 # rdiffweb Backup Notifier
 #	by Andy Forceno <andy@aurorabox.tech>
 
-# Usage: 
-# Executing rdiff_notify without arguments will push latest session stats for all repos
-# To obtain session stats for one repo, execute: rdiff_notify repo_name
-# Where `repo_name` is the folder name of the repo
+# Usage:
+# Executing rdiff_notify with no arguments will push latest session stats for all backups/repos
+# To obtain session stats for one repo:
+#			rdiff_notify.sh repo_name
+#
+# You can specify subfolders:
+#			rdiff_notify.sh "host/home"
+# will push the latest sessions stats for host's home directory backup
 
-# It is recommended to execute this script after each cron backup job, like so:
-# rdiff-backup -v5 --exclude-filelist /home/user/.rdiff-backup/host-home-excludes --print-statistics andy@host::/home /media/backups/host/home && sudo /home/user/scripts/bin/rdiff_notify host > /dev/null 2>&1
-# Upon successful backup of host's home directory, run rdiff_notify to push latest session statistics for host
+# It is recommended to execute this script after each cron backup job:
+# rdiff-backup -v5 --exclude-filelist /home/user/.rdiff-backup/host-home-excludes --print-statistics user@host::/home /media/backups/host/home && sudo /home/user/scripts/bin/rdiff_notify.sh host > /dev/null 2>&1
+# Upon successful backup of host's home directory, run rdiff_notify.sh to push latest session statistics for host
 
 # INFO: If the user executing rdiff_notify does not own the repos (backup destination dirs)
 # then rdiff_notify must be run as root!
@@ -27,7 +31,7 @@ dir_1="/media/backups"
 dir_2="/media/big-media"
 # Include the full path to each backup repository (each repo must include an rdiff-backup-data directory)
 # Feel free to use $dir_n variables, to reduce line length of the array
-REPO_DIRS=("$dir_1/Aurorabox/root" "$dir_1/Aurorabox/home" "$dir_1/Nyx/root" "$dir_2/google_drive" "$dir_2/Downloads" "$dir_2/Music")
+REPO_DIRS=("$dir_1/Ariadne/root" "$dir_1/Aurorabox/root" "$dir_1/Aurorabox/home" "$dir_1/Nyx/root" "$dir_2/google_drive" "$dir_2/Downloads" "$dir_2/Music")
 
 # If user doesn't specify a repo, parse all the repos and send the latest sessions stats for each
 if [[ -z "$repo" ]]; then
@@ -42,7 +46,7 @@ if [[ -z "$repo" ]]; then
 		# echo ""
 		echo "$HOSTNAME: Pushing rdiff-backup session stats for: $backup"
 	# Uncomment to receive sessions stats via mail
-	       # sudo cat "$session" | mail -s "Latest backup stats for $backup" root@aurorabox
+	    # sudo cat "$session" | mail -s "Latest backup stats for $backup" root@aurorabox
 		sudo cat "$session" | shuttle -p -n "$device" "Latest backup stats for $backup" 
 	# INFO: If you have many repos, consider increasing the sleep time 
 		sleep 1s
