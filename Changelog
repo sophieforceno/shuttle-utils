@@ -2,7 +2,7 @@
 v1.1 (03-21-17):
 * All: Cleaned up mistakes, omissions, and other sloppy things I missed in v1.0
 * Permaban: Moved user-defined variables to shuttle-utils.conf
-* Rdniff_notify: Fixed issue of mismatch between session statistics and repository paths
+* Rdiff_notify: Fixed mismatch between session statistics and repository paths in pushes
 
 v1.0 (03-20-17):
 * All: Better comments/documentation
