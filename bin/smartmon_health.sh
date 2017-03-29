@@ -64,6 +64,7 @@ LC_DISKS="$DISKS_def" ssh "$user"@"$i" LC_i="$i" LC_percent="$percent" LC_device
 			drive_health=$(echo "$smart_info" | head -n30 | grep "overall-health" | awk -F': ' '{ print $2 }')
 			# Only notify if test fails so we don't swamp the poor sys admin
 			if [[ -n "$drive_health" && "$drive_health" != +(PASSED|OK) ]]; then
+				echo "$LC_i: $j failed drive health check!"
 				echo "$smart_info" | mail -s "$LC_i: SMART Diagnostics for $j" "$LC_mailto"
 				echo -e "$drive_health" | "$LC_shuttle_path"/shuttle -p -n "$LC_device" "$LC_i: SMART Diagnostics for $j"
 			fi
@@ -93,6 +94,7 @@ LC_DISKS="$DISKS_def" ssh "$user"@"$i" LC_i="$i" LC_percent="$percent" LC_device
 			echo "$j $realloc,$pending,$offline" >> "$LC_conf_path"/smart-attribs.tmp		
 			# If any delta values are positive, send a push notification
 			if [[ "$realloc_delta" > 0 || "$pending_delta" > 0 || "$offline_delta" > 0 ]]; then
+				echo "$LC_i: $j: Warning! Reallocated, pending, or bad sectors have increased!"
 				printf "%s\n" "Reallocated +$realloc_delta, Pending +$pending_delta, Offline +$offline_delta" | "$LC_shuttle_path"/shuttle -p -n all "$LC_i: $j: SMART values have changed!"
 			fi
 		done
