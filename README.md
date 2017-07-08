@@ -3,7 +3,7 @@ README.md
 **SHuttle-utils v1.1 (03-21-17)**
 
 SHuttle-utils is a collection of Bash scripts for monitoring your Linux computer(s). All scripts require `SHuttle`, availble here: https://github.com/andyforceno/shuttle
-Some scripts require additional dependencies: `apcstats` depends on `apcupsd`, `update_all` relies on `dsh` (Distributed Shell), `rdiff_notify` depends on `rdiff-backup`, `smartmon_health`,`smartmon_test`, and `smartmon_results` all require `smartmontools`, and `sysmon` requires `lm-sensors` and, optionally, `nvclock`.
+Some scripts require additional dependencies: `apcstats.sh` depends on `apcupsd`, `update_all.sh` relies on `dsh` (Distributed Shell), `rdiff_info.sh` depends on `rdiff-backup`, `smartmon_health.sh`,`smartmon_test`, and `smartmon_results.sh` all require `smartmontools`, and `sysmon.sh` requires `lm-sensors` and, optionally, `nvclock`.
 
 Most of these scripts are meant to be run from a central repository/server that logs in to any number of remote hosts via SSH. As a result, full automation of many of the SHuttle-utils scripts requires passwordless SSH authentication and passwordless-sudo access, or some similar security arrangement that allows logging into remote hosts and executing commands as root without having to manually authenticate. For this reason, these scripts are meant to be run from behind a firewall inside a LAN. Lastly, some of these scripts will need to be adapted to your system. For example, `update_all` uses `apt-get`, so it will only work on Ubuntu-based distros.
 
@@ -44,8 +44,8 @@ update_all.sh			Run system updates on many hosts via apt-get using dsh (Distribu
 
 
 # Notes:
-* With the exception of `bspnd` and `hosts_check`, all scripts are meant to be executed via cron
-* Most scripts are meant to run from a central repository (server) that logs into remote hosts, except for: `ipnotif`, `procmon`, `permaban`, `rdiff_notify`, `apcstats` (for devices with a UPS connected), and `bspnd` (for laptops), 
+* With the exception of `bspnd.sh` and `hosts_check.sh`, all scripts are meant to be executed via cron (`rdiff_info.sh` has cli usage, too)
+* Most scripts are meant to run from a central repository (server) that logs into remote hosts, except for: `ipnotif.sh`, `procmon.sh`, `permaban.sh`, `rdiff_info.sh`, `apcstats.sh` (for devices with a UPS connected), and `bspnd.sh` (for laptops) 
 * See individual scripts for more information on each
 * SHuttle must be installed on all machines that the server will be sending push notifications from
 * If you run many of the scripts, it is recommended that you have their collective output saved to a separate log file such as `/var/log/shuttle-utils.log`, like so:

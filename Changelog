@@ -1,21 +1,26 @@
 ### Changelong:
+v1.2 (07-07-17): 
+* Rdiff_info.sh: Formerly rdiff_notify.sh. Now displays rdiff-backup session logs, stats, and errors via stdout or SHuttle. Run 'rdiff_info.sh' for usage.
+* Update_all.sh: Added --with-new-pkgs to upgrade command to fix issue with packages being held back
+* shuttle-utils.conf: Better defaults, better comments. It's just better, ok?
+
 v1.1 (03-21-17):
 * All: Cleaned up mistakes, omissions, and other sloppy things I missed in v1.0
-* Permaban: Moved user-defined variables to shuttle-utils.conf
-* Rdiff_notify: Fixed mismatch between session statistics and repository paths in pushes
+* Permaban.sh: Moved user-defined variables to shuttle-utils.conf
+* Rdiff_notify.sh: Fixed mismatch between session statistics and repository paths in pushes
 
 v1.0 (03-20-17):
 * All: Better comments/documentation
 * All: Added shell script extension .sh to all script files
 * All: Added variable to specify user that logs in to remote hosts (See shuttle-utils.conf)
-* Apcstats: New script! Pushes statistics for APC UPSes (depends on: apcupsd)
-* Permaban: Fixed bug in calculating the starting date of the past week (for push & email subject lines)
-* Rdiff_notify: New script! Sends push notification of rdiff-backup session statistics
+* Apcstats.sh: New script! Pushes statistics for APC UPSes (depends on: apcupsd)
+* Permaban.sh: Fixed bug in calculating the starting date of the past week (for push & email subject lines)
+* Rdiff_notify.sh: New script! Sends push notification of rdiff-backup session statistics (depends: rdiff-backup)
 * Smartmon*: All smartmon scripts fully support an array of drives
 * Smartmon*: Only tests or parses results from mounted drives
-* Smartmon_health: Stores pending, reallocated, and bad sector counts for each drive in array
-* Smartmon_health: Fixed numerous bugs
-* Smartmon_log: Renamed to smartmon_results.sh
+* Smartmon_health.sh: Stores pending, reallocated, and bad sector counts for each drive in array
+* Smartmon_health.sh: Fixed numerous bugs
+* Smartmon_log.sh: Renamed to smartmon_results.sh
 
 v0.9.9 (12-07-16):
 * All: All scripts converted to be piped to SHuttle v0.9.9+ (now accepts stdin for push bodies!)
@@ -39,9 +44,8 @@ v0.9.8 (08-01-16):
 * Config: Now storing all user config scripts in ~/.config/shuttle-utils
 * Config: Moved (almost all) user-defined variables to shuttle-utils.conf
 * Sysmon: New script! Notify of high Nvidia GPU temp, CPU temp, and system load
-* Update_all: Rewrote to use dsh (Distributed Shell, Dancers' SHell) to run concurrent updates
+* Update_all: Rewrote to use dsh (Distributed SHell) to run concurrent updates
 * Smartmon: Now accepts an array of drives (for now, drives must be the same /dev/sd* on all devices)
-
 
 v0.9.7 (07-24-16):
 * All: Most scripts now have sending of mail disabled by default

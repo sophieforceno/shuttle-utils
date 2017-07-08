@@ -19,10 +19,11 @@ printf '%s\n' "${HOSTS[@]}" > /etc/dsh/group/up
 
 # Connect to each remote host specified in the /etc/dsh/group/up file and run apt-get update, upgrade, and autoremove
 dsh -M -g up -c sudo apt-get -qq update > /dev/null 2>&1
-# Set non-interactive frontend to avoid display issues with config file choice frontend
-# Choose to preserve current config files on system, rather than package maintainer defaults 
+# DEBIAN_FRONTEND: Set non-interactive frontend to avoid display issues with config file choice frontend
+# --force-confold: Choose to preserve current config files on system, rather than package maintainer defaults
+# --with-new-pkgs: install new packages that updates depend on (this avoids packages being held back)
 dsh -vM -g up -c DEBIAN_FRONTEND="noninteractive" > /dev/null 2>&1
-dsh -vM -g up -c sudo apt-get -qq -o Dpkg::Options::="--force-confold" --force-yes upgrade > /dev/null 2>&1
+dsh -vM -g up -c sudo apt-get -qq -o Dpkg::Options::="--force-confold" --force-yes --with-new-pkgs upgrade > /dev/null 2>&1
 dsh -vM -g up -c sudo apt-get -qq --force-yes autoremove && wait $! > /dev/null 2>&1
 
 for i in "${HOSTS[@]}"; do
@@ -41,7 +42,7 @@ for i in "${HOSTS[@]}"; do
 	#fi
 	# If there are updates of any kind, send a push to notifty of updates
 	if [[ -n "$installed" || -n "$upgraded" || -n "$removed" ]]; then
-		echo -e "Installed:\n$installed\n\nUpgraded:\n$upgraded\n\nRemoved:\n$removed" | column -t | shuttle -p -n "$device" "$LC_i: Package updates for $curr_date"
+		echo -e "Installed:\n$installed\n\nUpgraded:\n$upgraded\n\nRemoved:\n$removed" | column -t | shuttle -p -n chrome "$LC_i: Package updates for $curr_date"
 		
 	# INFO: Uncomment this to send the update log as a text file. Use this if you are having trouble pushing the updates list via pipe
 		# Export the recently installed packages to a file, and push that. File must be in cwd, otherwise Pushbullet doesn't push it (a limitation of SHuttle)
@@ -50,7 +51,7 @@ for i in "${HOSTS[@]}"; do
 		# rm -f "$LC_conf_path"/dpkg-$curr_date
 
 		# INFO: Send the updates via mail, disabled by default
-		# echo -e "Package updates and removals:\n\nInstalled:\n$installed\n\nUpgraded:\n$upgraded\n\nRemoved:\n$removed" | column | mail -s "$LC_i: Updated packages for $curr_date" root@"$HOSTNAME"
+	#	 echo -e "Package updates and removals:\n\nInstalled:\n$installed\n\nUpgraded:\n$upgraded\n\nRemoved:\n$removed" | column | mail -s "$LC_i: Updated packages for $curr_date" root@"$HOSTNAME"
 	fi
 EOF
 done
