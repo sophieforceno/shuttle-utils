@@ -16,6 +16,6 @@ for i in "${HOST_ADDR[@]}"; do
 	rc=$?
 	# If exit code != 0, ping failed so host is (probably) down!
 	if [[ $rc -ne 0 ]]; then                  
-		"$LC_shuttle_path"/shuttle -p -n "$device" "$i is down or not responding to pings (rc = $rc)" > /dev/null
+		"$shuttle_path"/shuttle -p -n "$device" "$i is down or not responding to pings (rc = $rc)" > /dev/null
 	fi
 done
