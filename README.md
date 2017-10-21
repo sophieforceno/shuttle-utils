@@ -12,7 +12,7 @@ Most of these scripts are meant to be run from a central repository/server that 
     cd to shuttle-utils/
 
     # Populate 'hosts' with your hosts, and then:
-    mkdir ~/.config/shuttle-utilss
+    mkdir ~/.config/shuttle-utils
     cp hosts $HOME/.config/shuttle-utils
 
     # Edit the config file in a text editor
