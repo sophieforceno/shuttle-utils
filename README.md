@@ -58,7 +58,7 @@ Other things I've used SHuttle for:
 * Notify me when a torrent downloaded on my laptop is copied to my torrent server
 * Notify me when an IP has been permanently banned using fail2ban (see permaban.sh in this repo)
 * Send occasional notifications of active connections to my webserver serving a web app
-* Send me reminders to do X, where X is a mundane, oft-repeated task I somehow forget to do (cron + SHuttle)
+* Send me reminders to do x, where x is a mundane, oft-repeated task I somehow forget to do (cron + SHuttle)
 
 
 # License:
@@ -66,7 +66,7 @@ This program is distributed under the MIT license:
 
 The MIT License (MIT)
 
-Copyright (c) 2017 Andy Forceno <andy@aurorabox.tech>
+Copyright (c) 2017 Andy Forceno <aforceno@pm.me>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
