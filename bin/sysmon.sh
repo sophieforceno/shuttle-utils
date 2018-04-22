@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # Sysmon - Check CPU/GPU temps and system load 
-# 	By Andy Forceno <andy@aurorabox.tech>
+# 	By Andy Forceno <aforceno@pm.me>
 #
 # This script depends on sensors and nvclock
 
@@ -13,7 +13,7 @@ else
 fi
 
 # Check if machines are available
-source "$bin_path"/hosts_check.sh
+source "$bin_path"/hosts-check.sh
 
 for i in "${HOSTS[@]}"; do
 # Pass local vars to remote hosts

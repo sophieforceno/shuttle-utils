@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # hostname-isup - Ping hosts to check if they're up  
-# 	by Andy Forceno <andy@aurorabox.tech>
+# 	by Andy Forceno <aforceno@pm.me>
 #
 
 if [ -e "$HOME"/.config/shuttle-utils/shuttle-utils.conf ]; then
@@ -12,7 +12,7 @@ else
 fi
 
 for i in "${HOST_ADDR[@]}"; do
-	ping -w 10 -c 3 "$i" > /dev/null
+	ping -w 5 -c 2 "$i" > /dev/null
 	rc=$?
 	# If exit code != 0, ping failed so host is (probably) down!
 	if [[ $rc -ne 0 ]]; then                  

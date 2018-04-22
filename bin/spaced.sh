@@ -1,7 +1,7 @@
 #! /bin/bash
 
-# spaced - Disk Space Notification Daemon
-# 	By Andy Forceno <andy@aurorabox.tech>
+# spaced - Low Disk Space Notifier
+# 	By Andy Forceno <aforceno@pm.me>
 #
 
 if [ -e "$HOME"/.config/shuttle-utils/shuttle-utils.conf ]; then
@@ -12,7 +12,7 @@ else
 fi
 
 # Check if hosts are available before checking disc space
-source "$bin_path"/hosts_check.sh
+source "$bin_path"/hosts-check.sh
 
 # Everything after the ssh command will be executed on each remote host
 for i in "${HOSTS[@]}"; do
@@ -46,7 +46,7 @@ for i in "${HOSTS[@]}"; do
 			j_dev_name=$(echo -e "$df_output" | sed -n $line_num'p' | awk '{ print $1 }' )
 		
 			echo "Spaced: $LC_i: $j_dev_name has $j_free_space% free space!"
-			# echo -e "$df_heading\n$j_df_line" | mail -s "space.d: Low disk space for $j_dev_name" "$LC_mailto"
+		#	echo -e "$df_heading\n$j_df_line" | mail -s "space.d: Low disk space for $j_dev_name" "$LC_mailto"
 			echo "$j_mount_point partition has $j_free_space% free space" | "$LC_shuttle_path"/shuttle -p -n "$LC_device" "$LC_i: Low disk space for $j_dev_name" 
 		fi
 	done

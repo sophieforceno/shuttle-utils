@@ -2,7 +2,7 @@
 
 # procmon - Monitors an array of processes and sends pushes informing of stopped processes
 #
-# 	By Andy Forceno <andy@aurorabox.tech>
+# 	By Andy Forceno <aforceno@pm.me>
 #
 
 if [ -e "$HOME"/.config/shuttle-utils/shuttle-utils.conf ]; then

@@ -1,7 +1,16 @@
 ### Changelong:
+v1.3 (04-22-18):
+
+* All: Changed '_' in all filenames to '-'
+* All: Updated contact info
+* Renamed reboot_notif.sh to reboot-notify.sh
+* hosts_check.sh: Added -W argument to ping command (speeds up scripts that call hosts_check.sh by 100%)
+* smartmon_results.sh: Truncated to 10 lines the body of the test results push notification
+* update-all.sh: Removed deprecated arguments from apt-get commands
+
 v1.2 (07-07-17): 
 * Rdiff_info.sh: Formerly rdiff_notify.sh. Now displays rdiff-backup session logs, stats, and errors via stdout or SHuttle. Run 'rdiff_info.sh' for usage.
-* Update_all.sh: Added --with-new-pkgs to upgrade command to fix issue with packages being held back
+* Update_all.sh: Added --with-new-pkgs to upgrade command to prevent packages from being held back
 * shuttle-utils.conf: Better defaults, better comments. It's just better, ok?
 
 v1.1 (03-21-17):

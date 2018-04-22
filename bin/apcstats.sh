@@ -1,7 +1,7 @@
 # !/bin/bash
 
 # apcstats - APC UPS stats push notifier
-#	by Andy Forceno <andy@aurorabox.tech>
+#	by Andy Forceno <aforceno@pm.me>
 #
 
 # Your APC UPS must be accessible via computer this is executed on, such through a USB or serial cable
@@ -13,10 +13,10 @@ else
 	exit 1
 fi
 
-timeleft=$(apcaccess | awk -F: '/TIMELEFT/ { print $2 }')
-load=$(apcaccess | awk -F: '/LOADPCT/ { print $2 }')
-charge=$(apcaccess | awk -F: '/BCHARGE/ { print $2 }')
+timeleft=$(apcaccess -p TIMELEFT)
+load=$(apcaccess -p LOADPCT)
+charge=$(apcaccess -p BCHARGE)
 
-body="Battery Charge:$charge\nTime remaining:$timeleft\nLoad Percentage:$load"
+body="Battery Charge: $charge\nTime remaining: $timeleft\nLoad Percentage: $load"
 
-printf "%s" "$body" | shuttle -p -n "$device" "$HOSTNAME: APC UPS Stats for $(date +%-m-%d-%y)"
+printf "%s" "$body" | shuttle -p -n "$device" "$HOSTNAME: APC UPS Stats ($(date +%-m-%d-%y))"

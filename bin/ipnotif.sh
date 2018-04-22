@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # ipnotif: IP Address Change Push Notifier
-# by Andy Forceno <andy@aurorabox.tech>
+# by Andy Forceno <aforceno@pm.me>
 #
 
 # Uses the IPify API to obtain external IP

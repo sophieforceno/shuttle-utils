@@ -2,7 +2,7 @@
 
 #
 # Checklogs - Check for very large log files
-# 	by Andy Forceno <andy@aurorabox.tech>
+# 	by Andy Forceno <aforceno@pm.me>
 # 
 # Check for very large log files and alert the system administrator
 
@@ -14,7 +14,7 @@ else
 fi
 
 # Check if machines are available before updating
-source "$bin_path"/hosts_check.sh
+source "$bin_path"/hosts-check.sh
 
 for i in "${HOSTS[@]}"; do
 	echo "checklogs: Checking log files on: $i"
