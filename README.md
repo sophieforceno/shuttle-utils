@@ -3,9 +3,9 @@ README.md
 **SHuttle-utils v1.3 (04-22-18)**
 
 SHuttle-utils is a collection of Bash scripts for monitoring your Linux computer(s). All scripts require `SHuttle`, availble here: https://github.com/andyforceno/shuttle
-Some scripts require additional dependencies: `apcstats.sh` depends on `apcupsd`, `update_all.sh` relies on `dsh` (Distributed Shell), `rdiff_info.sh` depends on `rdiff-backup`, `smartmon_health.sh`,`smartmon_test`, and `smartmon_results.sh` all require `smartmontools`, and `sysmon.sh` requires `lm-sensors` and, optionally, `nvclock`.
+Some scripts require additional dependencies: `apcstats.sh` depends on `apcupsd`, `update-all.sh` relies on `dsh` (Distributed Shell), `rdiff-info.sh` depends on `rdiff-backup`, `smartmon-health.sh`,`smartmon-test`, and `smartmon-results.sh` all require `smartmontools`, and `sysmon.sh` requires `lm-sensors` and, optionally, `nvclock`.
 
-Most of these scripts are meant to be run from a central repository/server that logs in to any number of remote hosts via SSH. As a result, full automation of many of the SHuttle-utils scripts requires passwordless SSH authentication and passwordless-sudo access, or some similar security arrangement that allows logging into remote hosts and executing commands as root without having to manually authenticate. For this reason, these scripts are meant to be run from behind a firewall inside a LAN. Lastly, some of these scripts will need to be adapted to your system. For example, `update_all` uses `apt-get`, so it will only work on Ubuntu-based distros.
+Most of these scripts are meant to be run from a central repository/server that logs in to any number of remote hosts via SSH. As a result, full automation of many of the SHuttle-utils scripts requires passwordless SSH authentication and passwordless-sudo access, or some similar security arrangement that allows logging into remote hosts and executing commands as root without having to manually authenticate. For this reason, these scripts are meant to be run from behind a firewall inside a LAN. Lastly, some of these scripts will need to be adapted to your system. For example, `update-all` uses `apt-get`, so it will only work on Ubuntu-based distros.
 
 # Installation:
     git clone https://github.com/andyforceno/shuttle-utils/
@@ -28,28 +28,28 @@ apcstats.sh 			Pushes stats for APC UPSes (depends on: apcupsd)
 bspnd.sh			Battery charge status push notifier daemon (for laptops)
 checklogs.sh			Notify if system logs are greater than some size
 hostname-isup.sh		Notify if host stops responding to pings
-hosts_check.sh			Helper script to check if hosts are up (must be in same directory as the script that calls it)
+hosts-check.sh			Helper script to check if hosts are up (must be in same directory as the script that calls it)
 ipnotif.sh			Notify when dynamic IP changes (depends on: curl)
 permaban.sh            		Push notify of hosts banned by the SSH-repeater filter for Fail2Ban, their auth attempts, and whois info (depends on: fail2ban)
 procmon.sh             		Monitor processes and notify of stopped processes
-rdiff_notify.sh        		Send push notifications of rdiff-backup session statistics
-reboot_notif.sh			Notify when a reboot is requred
-smartmon_health.sh		Push SMART drive health info on remote hosts (depends on: smartmontools)
-smartmon_test.sh		Run Smartctl long test on remote hosts (depends on: smartmontools)
-smartmon_results.sh     	Push smartctl extended test results from remote hosts (depends on: smartmontools)
+rdiff-notify.sh        		Send push notifications of rdiff-backup session statistics
+reboot-notif.sh			Notify when a reboot is requred
+smartmon-health.sh		Push SMART drive health info on remote hosts (depends on: smartmontools)
+smartmon-test.sh		Run Smartctl long test on remote hosts (depends on: smartmontools)
+smartmon-results.sh     	Push smartctl extended test results from remote hosts (depends on: smartmontools)
 spaced.sh			Low disk space notification daemon
 sysmon.sh               	Notify of high CPU/GPU temperatures and system load
-update_all.sh			Run system updates on many hosts via apt-get using dsh (Distributed Shell), and push updated packages list
+update-all.sh			Run system updates on many hosts via apt-get using dsh (Distributed Shell), and push updated packages list
 ```
 
 
 # Notes:
-* With the exception of `bspnd.sh` and `hosts_check.sh`, all scripts are meant to be executed via cron (`rdiff_info.sh` has cli usage, too)
-* Most scripts are meant to run from a central repository (server) that logs into remote hosts, except for: `ipnotif.sh`, `procmon.sh`, `permaban.sh`, `rdiff_info.sh`, `apcstats.sh` (for devices with a UPS connected), and `bspnd.sh` (for laptops) 
+* With the exception of `bspnd.sh` and `hosts-check.sh`, all scripts are meant to be executed via cron (`rdiff-info.sh` has cli usage, too)
+* Most scripts are meant to run from a central repository (server) that logs into remote hosts, except for: `ipnotif.sh`, `procmon.sh`, `permaban.sh`, `rdiff-info.sh`, `apcstats.sh` (for devices with a UPS connected), and `bspnd.sh` (for laptops) 
 * See individual scripts for more information on each
 * SHuttle must be installed on all machines that the server will be sending push notifications from
 * If you run many of the scripts, it is recommended that you have their collective output saved to a separate log file such as `/var/log/shuttle-utils.log`, like so:
-` cron job | /path/to/script/reboot_notif 2>&1 >> /var/log/shuttle-utils.log`
+` cron job | /path/to/script/reboot-notif 2>&1 >> /var/log/shuttle-utils.log`
 * Don't forget to edit shuttle-utils.conf!
 
 Feel free to contribute new scripts or improve existing ones!
