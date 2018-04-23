@@ -40,7 +40,7 @@ if [ ${#BANNED[@]} -ne 0 ]; then
         for ip in "${BANNED[@]}"; do
           whois=$(whois $ip)
 			    attempts=$(grep -a "from $ip" "$auth_log")
-          #echo -e "$whois\n\n$attempts" | shuttle -p -n chrome "Whois information & login attempts for $ip"
+          #echo -e "$whois\n\n$attempts" | shuttle -p -n "$device" "Whois information & login attempts for $ip"
 
           # INFO: I've had issues pushing some whois info, so pushing is disabled.
           # Whois info is mailed by default.
