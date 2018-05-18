@@ -28,15 +28,6 @@ echo "${HOSTS[@]}" > "$conf_path"/.smart_hosts
 for i in "${HOSTS[@]}"; do
 	echo "smartmon_test: Connecting to: $i"
 
-	# Remove /dev/sdc if host = Aurorabox
-	if [[ "$i" = "Aurorabox" ]]; then
-		unset DISKS[1]
-		# Remove null element left behind (precautionary)
-		for elem in "${!DISKS[@]}"; do 
- 			[ -n "${DISKS[$elem]}" ] || unset "HOSTS[$elem]" 
-		done
-	fi
-
 # Required to pass DISKS array to remote hosts
 # Thanks to Stéphane Chazelas
 # See: http://unix.stackexchange.com/a/342575/123270
