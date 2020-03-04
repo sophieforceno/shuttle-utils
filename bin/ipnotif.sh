@@ -23,9 +23,9 @@ fi
 
 # API call to obtain IP address
 # See: https://www.ipify.org/
-new_ip=$(curl -s 'https://api.ipify.org?format=text')
+new_ip=$(curl -s 'https://api6.ipify.org?format=text')
 
-if [[ "$last_ip" != "$new_ip" ]]; then
+if [[ "$last_ip" != "$new_ip" && -n "new_ip" ]]; then
 	"$shuttle_path"/shuttle -p -n "$device" "$HOSTNAME: External IP address change" "Current IP: $new_ip"
 # Write date & address to file for IP address history
 	echo "$(date "+%D %H:%M") - $new_ip" >> $conf_path/.iphistory
