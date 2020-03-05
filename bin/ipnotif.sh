@@ -30,5 +30,3 @@ if [[ "$last_ip" != "$new_ip" && -n "$new_ip" && -n "$last_ip" ]]; then
 # Write date & address to file for IP address history
 	echo "$(date "+%D %H:%M") - $new_ip" >> $conf_path/.iphistory
 fi
-
-

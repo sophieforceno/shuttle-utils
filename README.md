@@ -45,11 +45,12 @@ update-all.sh			Run system updates on many hosts via apt-get using dsh (Distribu
 
 # Notes:
 * With the exception of `bspnd.sh` and `hosts-check.sh`, all scripts are meant to be executed via cron (`rdiff-info.sh` has cli usage, too)
-* Most scripts are meant to run from a central repository (server) that logs into remote hosts, except for: `ipnotif.sh`, `procmon.sh`, `permaban.sh`, `rdiff-info.sh`, `apcstats.sh` (for devices with a UPS connected), and `bspnd.sh` (for laptops) 
+* `hosts_check` is called by most of the other scripts, it pings the hosts listed in the shuttle-utils `hosts` file, so the scripts only initiate ssh connections with hosts that are up.
+* Most scripts are meant to run from a central repository (server) that logs into remote hosts, except for: `ipnotif.sh`, `procmon.sh`, `permaban.sh`, `rdiff-info.sh`, `apcstats.sh` (for devices with a USB-connected APC UPS), and `bspnd.sh` (for laptops) 
 * See individual scripts for more information on each
-* SHuttle must be installed on all machines that the server will be sending push notifications from
-* If you run many of the scripts, it is recommended that you have their collective output saved to a separate log file such as `/var/log/shuttle-utils.log`, like so:
-` cron job | /path/to/script/reboot-notif 2>&1 >> /var/log/shuttle-utils.log`
+* SHuttle must be installed and authenticated on all machines that the server will be sending push notifications from (though I provide the option, commented out, to send the notifications as mail)
+* If you run many of the scripts, it is recommended that you have their collective output saved to a separate log file such as `/var/log/shuttleutils.log`, like so:
+` cron job | /path/to/script/reboot-notif 2>&1 >> /var/log/shuttleutils.log`
 * Don't forget to edit shuttle-utils.conf!
 
 Feel free to contribute new scripts or improve existing ones!
