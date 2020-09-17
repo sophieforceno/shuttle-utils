@@ -2,13 +2,13 @@ README.md
 
 **SHuttle-utils v1.3 (04-22-18)**
 
-SHuttle-utils is a collection of Bash scripts for monitoring your Linux computer(s). All scripts require `SHuttle`, availble here: https://github.com/SyntrophicConsortium/shuttle
+SHuttle-utils is a collection of Bash scripts for monitoring your Linux computer(s). All scripts require `SHuttle`, availble here: https://github.com/andyforceno/shuttle
 Some scripts require additional dependencies: `apcstats.sh` depends on `apcupsd`, `update-all.sh` relies on `dsh` (Distributed Shell), `rdiff-info.sh` depends on `rdiff-backup`, `smartmon-health.sh`,`smartmon-test`, and `smartmon-results.sh` all require `smartmontools`, and `sysmon.sh` requires `lm-sensors` and, optionally, `nvclock`.
 
 Most of these scripts are meant to be run from a central repository/server that logs in to any number of remote hosts via SSH. As a result, full automation of many of the SHuttle-utils scripts requires passwordless SSH authentication and passwordless-sudo access, or some similar security arrangement that allows logging into remote hosts and executing commands as root without having to manually authenticate. For this reason, these scripts are meant to be run from behind a firewall inside a LAN. Lastly, some of these scripts will need to be adapted to your system. For example, `update-all` uses `apt-get`, so it will only work on Ubuntu-based distros.
 
 # Installation:
-    git clone https://github.com/SyntrophicConsortium/shuttle-utils/
+    git clone https://github.com/andyforceno/shuttle-utils/
     cd to shuttle-utils/
 
     # Populate 'hosts' with your hosts, and then:
@@ -67,7 +67,7 @@ This program is distributed under the MIT license:
 
 The MIT License (MIT)
 
-Copyright (c) 2017 SyntrophicConsortium
+Copyright (c) 2017 Andy Forceno
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
