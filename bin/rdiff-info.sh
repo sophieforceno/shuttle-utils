@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # rdiff_info.sh: rdiff-backup session information
-#	by Andy Forceno <aforceno@pm.me>
+#	by Sophie Forceno
 
 # Usage Notes:
 # It is recommended to execute this script after each cron backup job:
