@@ -1,7 +1,7 @@
 # !/bin/bash
 
 # apcstats - APC UPS stats push notifier
-#	by Andy Forceno <aforceno@pm.me>
+#	by Sophie Forceno
 #
 
 # Your APC UPS must be accessible via computer this is executed on, such through a USB or serial cable
