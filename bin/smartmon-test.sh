@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # smartmon_test - Perform the S.M.A.R.T. Extended Test on many remote hosts
-# 	by Andy Forceno <aforceno@pm.me>
+# 	by Sophie Forceno
 #
 # Runs the long S.M.A.R.T. test for disks on remote hosts
 
