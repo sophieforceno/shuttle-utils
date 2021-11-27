@@ -2,13 +2,15 @@
 
 #
 # smartmon_health - S.M.A.R.T. Drive Health Push Notifier
-# 	by Andy Forceno <aforceno@pm.me>
+# 	by Sophie Forceno
 #
 # Checks SMART drive health info for disks on remote hosts 
 # Pushes info when specific drive parameters change
 
 # It is recommeneded to run this daily via cron (as root user)
 # And run the long test weekly (see smartmon_test and smartmon_results)
+
+# 11-27-2021 - Last I checked, this is the one script that no longer functions. It might be me, I run Arch Linux now, so ymmv
 
 if [ -e "$HOME"/.config/shuttle-utils/shuttle-utils.conf ]; then
 	source "$HOME"/.config/shuttle-utils/shuttle-utils.conf
