@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # hostname-isup - Ping hosts to check if they're up  
-# 	by Andy Forceno <aforceno@pm.me>
+# 	by Sophie Forceno
 #
 
 if [ -e "$HOME"/.config/shuttle-utils/shuttle-utils.conf ]; then
