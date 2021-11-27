@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # update_all - Run package updates (apt-get) on multiple hosts via dsh 
-# 	By Andy Forceno <aforceno@pm.me>
+# 	by Sophie Forceno
 #
 # INFO: This script depends on dsh (Distributed Shell)
 
