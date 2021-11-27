@@ -2,7 +2,7 @@
 
 # bspnd: Battery Status Push Notifier daemon
 # 
-# Andy Forceno <aforceno@pm.me>
+# by Sophie Forceno
 # 
 
 # Usage:
