@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # reboot_notif - Notify if reboot is needed 
-# 	by Andy Forceno <aforceno@pm.me>
+# 	by Sophie Forceno
 #
 # Sends a push notification to specified device if a reboot is needed 
 
