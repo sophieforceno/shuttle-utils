@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # smartmon_result - S.M.A.R.T. Extended Test Results Push Notifier
-# 	by Andy Forceno <aforceno@pm.me>
+# 	by Sophie Forceno
 #
 
 # It is recommended to run this weekly via cron, after smartmon_test
