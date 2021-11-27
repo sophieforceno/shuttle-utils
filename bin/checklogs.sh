@@ -2,7 +2,7 @@
 
 #
 # Checklogs - Check for very large log files
-# 	by Andy Forceno <aforceno@pm.me>
+# 	by Sophie Forceno
 # 
 # Check for very large log files and alert the system administrator
 
