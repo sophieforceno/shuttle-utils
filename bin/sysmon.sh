@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # Sysmon - Check CPU/GPU temps and system load 
-# 	By Andy Forceno <aforceno@pm.me>
+# 	by Sophie Forceno
 #
 # This script depends on sensors and nvclock
 
