@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # spaced - Low Disk Space Notifier
-# 	By Andy Forceno <aforceno@pm.me>
+# 	by Sophie Forceno
 #
 
 if [ -e "$HOME"/.config/shuttle-utils/shuttle-utils.conf ]; then
