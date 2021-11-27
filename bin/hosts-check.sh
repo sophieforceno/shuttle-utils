@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # hosts-check.sh - Helper script that checks host connectivity
-# 	By Andy Forceno <aforceno@pm.me>
+# 	by Sophie Forceno
 # 
 
 # Sourced within each SHuttle-utils script
