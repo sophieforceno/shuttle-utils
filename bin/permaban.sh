@@ -1,14 +1,13 @@
 #! /bin/bash
 #
 # Permaban - v1.5
-#	by Andy Forceno <aforceno@pm.me>
+#	by Sophie Forceno
 #
 # Each week, make a list of IPs permanently banned by fail2ban, and email it to root@localhost
 # Also send whois info for permabanned IPs, and the list of failed authentication attempts
 #
 # This script requires the ssh-repeater filter for fail2ban. 
 # See: http://stuffphilwrites.com/2013/03/permanently-ban-repeat-offenders-fail2ban/
-# Or see the comments beneath this script on GitHub
 #
 # This script works best via cron, for example:
 # 58 23  * * 5     /home/user/bin/permaban
