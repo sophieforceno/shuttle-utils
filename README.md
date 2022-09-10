@@ -1,6 +1,6 @@
 README.md
 
-**SHuttle-utils v1.3 (04-22-18)**
+**SHuttle-utils v1.4 (09-10-22)**
 
 SHuttle-utils is a collection of Bash scripts for monitoring your Linux computer(s). All scripts require `SHuttle`, availble here: https://github.com/sophieforceno/shuttle
 Some scripts require additional dependencies: `apcstats.sh` depends on `apcupsd`, `update-all.sh` relies on `dsh` (Distributed Shell), `rdiff-info.sh` depends on `rdiff-backup`, `smartmon-health.sh`,`smartmon-test`, and `smartmon-results.sh` all require `smartmontools`, and `sysmon.sh` requires `lm-sensors` and, optionally, `nvclock`.
@@ -67,7 +67,7 @@ This program is distributed under the MIT license:
 
 The MIT License (MIT)
 
-Copyright (c) 2021 Sophie Forceno
+Copyright (c) 2022 Sophie Forceno
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
