@@ -23,7 +23,9 @@ fi
 
 # API call to obtain IP address
 # See: https://www.ipify.org/
-new_ip=$(curl -s 'https://api6.ipify.org?format=text')
+#new_ip=$(curl -s 'https://api6.ipify.org?format=text')
+# Sometimes ipipfy is down, so use this now
+new_ip=$(curl -s 'https://ifconfig.me')
 
 if [[ "$last_ip" != "$new_ip" && -n "$new_ip" && -n "$last_ip" && -n "$new_ip" ]]; then
 	"$shuttle_path"/shuttle -p -n "$device" "$HOSTNAME: External IP address change" "Current IP: $new_ip"
