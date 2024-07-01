@@ -181,8 +181,8 @@ case "$2" in
 			If the user executing rdiff_info.sh does not own the backup repository (backup destination directory) then rdiff_info.sh must be run as root!
 			One output_type (-o or -p) and at least one data_type (-e, -l, or -s) are required.
 		    		rdiff_info.sh -p -s repo_name 		(Push Stats)
-			   		rdiff_info.sh -o -e -s				(Standard Output, Errors and Stats)
-			   		rdiff_info.sh -m -a					(Mail, Errors, Logs, and Stats)
+			   	rdiff_info.sh -o -e -s			(Standard Output, Errors and Stats)
+			   	rdiff_info.sh -m -a			(Mail, Errors, Logs, and Stats)
 			Arguments must be in this order: rdiff_info.sh -o or -p first, then -e, l, or -s repo
 		
 	EOF
