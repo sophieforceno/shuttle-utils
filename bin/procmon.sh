@@ -15,7 +15,7 @@ fi
 	for j in "${SERVER_PROC[@]}"; do
 		# Enclose first letter in [ ] so ps | grep command isn't listed in the grepped results
 		j_bracket=$(echo "$j" | sed 's/./[\0]/') 
-		proc_status=$(ps aux | grep -w "$j_bracket")
+		proc_status=$(ps aux | grep "$j_bracket" | head -n 1)
 
 		if [[ -z "$proc_status" ]]; then
 			# Add stopped processes to array
