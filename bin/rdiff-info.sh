@@ -89,13 +89,13 @@ case "$2" in
 		;;
 	*)
 		cat <<- EOF
-Usage: rdiff_info.sh output_type data_type repo_name
+Usage: rdiff_info.sh info_type data_type repo_name
 
 OPTIONS:
 	output_type:
 		p | push 		Push notification via SHuttle
-		o | Output 		Standard output will be used
-  	data_type:
+		o | output 		Standard output will be used
+  	info_type:
 		e | errors		Output errors in log of repo_name
 		l | log 		Output log of latest backup of repo_name
 		s | stats 		Output session statistics for latest backup of repo_name
