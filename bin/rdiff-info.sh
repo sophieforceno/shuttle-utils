@@ -89,21 +89,23 @@ case "$2" in
 		;;
 	*)
 		cat <<- EOF
-Usage: rdiff_info.sh OPTIONS repo_name
+Usage: rdiff_info.sh output_type data_type repo_name
 
 OPTIONS:
+	output_type:
 		p | push 		Push notification via SHuttle
 		o | Output 		Standard output will be used
+  	data_type:
 		e | errors		Output errors in log of repo_name
 		l | log 		Output log of latest backup of repo_name
 		s | stats 		Output session statistics for latest backup of repo_name
 
-NOTES: repo_name is a directory, and can be a subdirectory: rdiff_info.sh stats home/user
-	   If the user executing rdiff_info.sh does not own the backup repository (backup destination directory) then rdiff_info.sh must be run as root!
-	   Arguments can be combined (except for -o and -p): 		
-	   		rdiff_info.sh -o -e -s
-	   	Displays errors and statistics via standard output
-	   	Arguments must be in this order: rdiff_info.sh -o or -p first, then -e, l, or -s repo
+NOTES:  repo_name is a directory, and can be a subdirectory: rdiff_info.sh stats home/user
+	If the user executing rdiff_info.sh does not own the backup repository (backup destination directory) then rdiff_info.sh must be run as root!
+	One output_type (-o or -p) and at least one data_type (-e, -l, or -s) are required.
+    		rdiff_info.sh -p -s repo_name 		(Push Stats)
+	   	rdiff_info.sh -o -e -s			(Standard Output, Errors and Stats)
+	Arguments must be in this order: rdiff_info.sh -o or -p first, then -e, l, or -s repo
 
 EOF
 	;;
